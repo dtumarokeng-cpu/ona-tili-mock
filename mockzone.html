@@ -1,0 +1,2622 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ona tili va adabiyot — Milliy sertifikat (To‘liq Mock Imtihon) | Raxmatov Umarjon</title>
+  <style>
+    /* =========================================================================
+       1. DESIGN TOKENS & RESET (ZERO EXTERNAL DEPENDENCIES, OFFLINE-SAFE)
+       ========================================================================= */
+    :root {
+      --bg-page: #f4f6fb;
+      --bg-card: #ffffff;
+      --bg-subtle: #f8fafc;
+      --bg-muted: #eef2f6;
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-light: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-soft: #eef2ff;
+      --success: #059669;
+      --success-hover: #047857;
+      --success-soft: #ecfdf5;
+      --warning: #d97706;
+      --warning-soft: #fffbeb;
+      --danger: #e11d48;
+      --danger-soft: #fff1f2;
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 26px;
+      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 10px 28px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 20px 45px rgba(15, 23, 42, 0.12);
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-serif: Georgia, "Times New Roman", Times, serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================================================================
+       2. LAYOUT & COMPONENTS
+       ========================================================================= */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding: 0 24px;
+      }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 10px 16px;
+      transition: all 0.16s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.985);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #ffffff;
+    }
+
+    .btn-success:hover:not(:disabled) {
+      background: var(--success-hover);
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--border-strong);
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: var(--bg-subtle);
+      border-color: #94a3b8;
+    }
+
+    .btn-soft-success {
+      background: var(--success-soft);
+      color: #065f46;
+      border-color: #a7f3d0;
+    }
+
+    .btn-soft-success:hover:not(:disabled) {
+      background: #d1fae5;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .ru-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    /* Toast notification */
+    #toast-banner {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 90;
+      max-width: 360px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid #334155;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toast-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #34d399;
+      flex-shrink: 0;
+    }
+
+    /* =========================================================================
+       3. START SCREEN (GROWMOCK INSPIRED)
+       ========================================================================= */
+    .start-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(180deg, #f8faff 0%, #eef2ff 45%, #f1f5f9 100%);
+    }
+
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .header-inner {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #090d16 0%, #1e1b4b 55%, #0f172a 100%);
+      color: #ffffff;
+      border-radius: var(--radius-xl);
+      padding: 28px 22px;
+      box-shadow: var(--shadow-md);
+    }
+
+    @media (min-width: 640px) {
+      .hero-card {
+        padding: 40px 36px;
+      }
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    @media (min-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1.65fr 1fr;
+      }
+    }
+
+    .scale-box {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .scale-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .scale-cell {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 8px 6px;
+    }
+
+    .sections-5-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 560px) {
+      .sections-5-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .sections-5-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    .sec-info-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .duration-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .duration-pill input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .duration-pill span {
+      display: inline-block;
+      padding: 9px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+
+    .duration-pill input:checked + span {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    /* =========================================================================
+       4. EXAM WORKSPACE
+       ========================================================================= */
+    .exam-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-page);
+    }
+
+    .progress-track {
+      width: 110px;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    @media (min-width: 640px) {
+      .progress-track {
+        width: 140px;
+      }
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+      width: 0%;
+    }
+
+    .sec-nav-bar {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+    }
+
+    @media (min-width: 1150px) {
+      .sec-nav-bar {
+        display: flex;
+      }
+    }
+
+    .sec-nav-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .sec-nav-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .timer-badge {
+      background: #0f172a;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 7px 11px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .timer-badge.warning {
+      background: var(--danger);
+    }
+
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 18px 0 36px;
+      align-items: start;
+    }
+
+    @media (min-width: 1024px) {
+      .workspace-grid {
+        grid-template-columns: 1fr 310px;
+        padding: 24px 0 44px;
+      }
+    }
+
+    .sidebar-panel {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .sidebar-panel {
+        display: block;
+        position: sticky;
+        top: 84px;
+      }
+    }
+
+    .legend-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+    }
+
+    .palette-btn {
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.14s ease;
+    }
+
+    .palette-btn.answered {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .palette-btn.flagged {
+      background: #fbbf24;
+      border-color: #f59e0b;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    .palette-btn.current {
+      outline: 2px solid #0f172a;
+      outline-offset: 1px;
+    }
+
+    .passage-card {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+
+    .passage-scroll {
+      max-height: 250px;
+      overflow-y: auto;
+      font-family: var(--font-serif);
+      font-size: 14.5px;
+      line-height: 1.78;
+      color: #1e293b;
+      padding-right: 6px;
+    }
+
+    .passage-scroll p {
+      margin: 0 0 10px;
+    }
+
+    .passage-scroll p:last-child {
+      margin-bottom: 0;
+    }
+
+    .ghazal-card {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+
+    .ghazal-pre {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: 14.5px;
+      line-height: 1.9;
+      color: #1e1b4b;
+      white-space: pre-wrap;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 13px 15px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      background: #ffffff;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .option-btn:hover {
+      background: var(--bg-subtle);
+      border-color: #94a3b8;
+    }
+
+    .option-btn.selected {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: #1e1b4b;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.14);
+    }
+
+    .option-letter {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--bg-muted);
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .option-btn.selected .option-letter {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .text-input, .textarea-input {
+      width: 100%;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--text-main);
+      background: #ffffff;
+      outline: none;
+    }
+
+    .text-input:focus, .textarea-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
+    }
+
+    .essay-textarea {
+      font-family: var(--font-serif);
+      line-height: 1.75;
+      min-height: 260px;
+      resize: vertical;
+    }
+
+    /* =========================================================================
+       5. RESULTS & ANALYTICS SCREEN
+       ========================================================================= */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 600px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-card.dark {
+      background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+      color: #ffffff;
+      border-color: #312e81;
+    }
+
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 700px) {
+      .breakdown-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .breakdown-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 680px) {
+      .criteria-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1040px) {
+      .criteria-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .criterion-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .review-item {
+      padding: 18px 22px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .review-item.wrong {
+      background: #fff8f9;
+    }
+
+    /* =========================================================================
+       6. MODALS & FOOTER & PRINT
+       ========================================================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      background: rgba(15, 23, 42, 0.62);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      width: 100%;
+      padding: 22px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-light);
+    }
+
+    .modal-card.wide {
+      max-width: 900px;
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+
+    .site-footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border-light);
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    .mobile-only-btn {
+      display: inline-flex;
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-only-btn {
+        display: none !important;
+      }
+    }
+
+    .desktop-only-btn {
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .desktop-only-btn {
+        display: inline-flex;
+      }
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Banner -->
+  <div id="toast-banner" class="hidden" role="status" aria-live="polite">
+    <span class="toast-dot"></span>
+    <span id="toast-message">Xabar</span>
+  </div>
+
+  <!-- =====================================================================
+       1. START SCREEN (GROWMOCK INSPIRED)
+       ===================================================================== -->
+  <div id="start-screen" class="start-wrapper">
+    <header class="top-header">
+      <div class="container header-inner">
+        <div class="brand-group">
+          <div class="ru-badge">RU</div>
+          <div>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+              <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; color:var(--primary);">
+                Milliy sertifikat • Full mock
+              </span>
+              <span class="badge" style="background:var(--primary-soft); color:#3730a3; border:1px solid #c7d2fe;">
+                Muallif: Raxmatov Umarjon
+              </span>
+            </div>
+            <div style="font-size:14.5px; font-weight:800; color:var(--text-main);">
+              Ona tili va adabiyot — Milliy sertifikat (To‘liq Mock Imtihon)
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <button type="button" onclick="openStandaloneEssayModal()" class="btn btn-soft-success">
+            <span>Faqat Esseni Tekshirish (AI)</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container" style="padding-top:24px; padding-bottom:32px; width:100%;">
+      <section class="hero-card">
+        <div class="hero-grid">
+          <div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+              <span class="badge" style="background:rgba(99,102,241,0.22); color:#e0e7ff; border:1px solid rgba(165,180,252,0.35);">
+                45 topshiriq • 75 ball • Har safar yangi variant
+              </span>
+              <span class="badge" style="background:rgba(251,191,36,0.16); color:#fde68a; border:1px solid rgba(251,191,36,0.35);">
+                Raxmatov Umarjon tomonidan yaratilgan
+              </span>
+            </div>
+            <h1 style="margin:0 0 10px; font-size:clamp(22px, 3.6vw, 36px); font-weight:800; line-height:1.2;">
+              Ona tili va adabiyot — Milliy sertifikat (To‘liq Mock Imtihon)
+            </h1>
+            <p style="margin:0; color:#cbd5e1; font-size:14px; max-width:680px;">
+              UZBMB milliy sertifikat spetsifikatsiyasi asosidagi to‘liq sinov tizimi: 1–15 grammatika va imlo, 16–25 ilmiy/badiiy matn tahlili, 26–35 Navoiy g‘azali, adabiyot va moslashtirish, 36–44 ochiq topshiriqlar hamda 45-topshiriq — 12 mezonli Argumentativ Esse (24 ball).
+            </p>
+          </div>
+
+          <div class="scale-box">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:#a5b4fc;">
+              75 ballik sertifikat shkalasi
+            </div>
+            <div class="scale-grid">
+              <div class="scale-cell">
+                <div style="font-weight:800; color:#6ee7b7; font-size:13px;">A+ / A</div>
+                <div style="font-size:11px; color:#cbd5e1;">70+ / 65–69.9</div>
+              </div>
+              <div class="scale-cell">
+                <div style="font-weight:800; color:#7dd3fc; font-size:13px;">B+ / B</div>
+                <div style="font-size:11px; color:#cbd5e1;">60–64.9 / 55–59.9</div>
+              </div>
+              <div class="scale-cell">
+                <div style="font-weight:800; color:#fcd34d; font-size:13px;">C+ / C</div>
+                <div style="font-size:11px; color:#cbd5e1;">50–54.9 / 46–49.9</div>
+              </div>
+            </div>
+            <div style="font-size:11.5px; color:#94a3b8; margin-top:10px;">
+              Test: 51.0 ball (1–44) • Esse: 24.0 ball (45-topshiriq)
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:20px; padding:22px;">
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:14px;">
+          <h2 style="margin:0; font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-secondary);">
+            Imtihon tarkibi (45 topshiriq)
+          </h2>
+          <span class="badge" style="background:var(--primary-soft); color:var(--primary);">
+            Har boshlashda Variant 1 / 2 / 3 + tasodifiy tartib
+          </span>
+        </div>
+
+        <div class="sections-5-grid">
+          <div class="sec-info-card">
+            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:var(--primary); margin-bottom:6px;">
+              <span>1–15-SAVOL</span>
+              <span style="color:var(--text-muted);">15 ta</span>
+            </div>
+            <div style="font-weight:700; font-size:13.5px; margin-bottom:4px;">Grammatika & Imlo</div>
+            <div style="font-size:12px; color:var(--text-secondary);">Fonetika, imlo, paronimlar, morfologiya, sintaksis, tinish belgilari.</div>
+          </div>
+
+          <div class="sec-info-card">
+            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:#0284c7; margin-bottom:6px;">
+              <span>16–25-SAVOL</span>
+              <span style="color:var(--text-muted);">10 ta</span>
+            </div>
+            <div style="font-weight:700; font-size:13.5px; margin-bottom:4px;">O‘qib tushunish</div>
+            <div style="font-size:12px; color:var(--text-secondary);">Ilmiy-ommabop maqola va badiiy nasriy parcha tahlili.</div>
+          </div>
+
+          <div class="sec-info-card">
+            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:var(--warning); margin-bottom:6px;">
+              <span>26–35-SAVOL</span>
+              <span style="color:var(--text-muted);">10 ta</span>
+            </div>
+            <div style="font-weight:700; font-size:13.5px; margin-bottom:4px;">Adabiyot & G‘azal</div>
+            <div style="font-size:12px; color:var(--text-secondary);">Navoiy g‘azali, badiiy san’atlar, adabiyot va 33–35 moslashtirish.</div>
+          </div>
+
+          <div class="sec-info-card">
+            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:#7c3aed; margin-bottom:6px;">
+              <span>36–44-SAVOL</span>
+              <span style="color:var(--text-muted);">9 ta</span>
+            </div>
+            <div style="font-weight:700; font-size:13.5px; margin-bottom:4px;">Ochiq topshiriqlar</div>
+            <div style="font-size:12px; color:var(--text-secondary);">Qisqa yozma javobli sintaktik, leksik va adabiy savollar.</div>
+          </div>
+
+          <div class="sec-info-card" style="background:var(--success-soft); border-color:#a7f3d0;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:var(--success); margin-bottom:6px;">
+              <span>45-TOPSHIRIQ</span>
+              <span>24 ball</span>
+            </div>
+            <div style="font-weight:700; font-size:13.5px; margin-bottom:4px;">Yozma ish (Esse)</div>
+            <div style="font-size:12px; color:#065f46;">12 mezon asosida avtomatik tahlil va baholash.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; padding-top:18px; border-top:1px solid var(--border-light); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;">
+          <div>
+            <div style="font-size:11.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-secondary);">
+              Imtihon vaqtini tanlang
+            </div>
+            <div class="duration-pills">
+              <label class="duration-pill">
+                <input type="radio" name="exam-duration" value="180" checked />
+                <span>Rasmiy: 180 daqiqa</span>
+              </label>
+              <label class="duration-pill">
+                <input type="radio" name="exam-duration" value="90" />
+                <span>Tezkor: 90 daqiqa</span>
+              </label>
+              <label class="duration-pill">
+                <input type="radio" name="exam-duration" value="0" />
+                <span>Vaqtsiz mashq</span>
+              </label>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <button type="button" onclick="openStandaloneEssayModal()" class="btn btn-soft-success">
+              Faqat Esseni Tekshirish (AI)
+            </button>
+            <button type="button" onclick="startFreshRandomExam()" class="btn btn-primary" style="padding:12px 22px; font-size:14.5px;">
+              <span>Mock Imtihonni boshlash</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div style="font-size:13px; font-weight:700; color:var(--text-main);">
+        Muallif: <span style="color:var(--primary); font-weight:800;">Raxmatov Umarjon</span> • Ona tili va adabiyot — Milliy sertifikat (To‘liq Mock Imtihon)
+      </div>
+      <div style="font-size:11.5px; color:var(--text-muted); margin-top:4px;">
+        Raxmatov Umarjon tomonidan yaratilgan • 45 topshiriq + 12 mezonli esse tekshiruvchi
+      </div>
+    </footer>
+  </div>
+
+  <!-- =====================================================================
+       2. EXAM WORKSPACE SCREEN
+       ===================================================================== -->
+  <div id="exam-screen" class="exam-wrapper hidden">
+    <header class="top-header no-print">
+      <div class="container header-inner">
+        <div class="brand-group">
+          <button type="button" onclick="goHomeFromExam()" title="Bosh sahifaga qaytish" class="ru-badge" style="border:none;">
+            RU
+          </button>
+          <div style="min-width:0;">
+            <div style="font-size:12.5px; font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+              <span id="active-variant-label">Variant 1</span> • <span style="color:var(--primary);">Raxmatov Umarjon</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:3px;">
+              <div class="progress-track">
+                <div id="progress-bar-fill" class="progress-fill"></div>
+              </div>
+              <span style="font-size:11.5px; font-weight:700; color:var(--text-secondary);">
+                <span id="answered-count">0</span>/45
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <nav class="sec-nav-bar" aria-label="Bo‘limlar">
+          <button type="button" onclick="jumpToQuestion(1)" id="tab-sec-1" class="sec-nav-btn active">1–15 Grammatika</button>
+          <button type="button" onclick="jumpToQuestion(16)" id="tab-sec-2" class="sec-nav-btn">16–25 Matn</button>
+          <button type="button" onclick="jumpToQuestion(26)" id="tab-sec-3" class="sec-nav-btn">26–35 Adabiyot</button>
+          <button type="button" onclick="jumpToQuestion(36)" id="tab-sec-4" class="sec-nav-btn">36–44 Ochiq</button>
+          <button type="button" onclick="jumpToQuestion(45)" id="tab-sec-5" class="sec-nav-btn">45-Esse</button>
+        </nav>
+
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+          <button type="button" onclick="startFreshRandomExam()" class="btn btn-outline desktop-only-btn" style="padding:7px 12px; font-size:12px;">
+            Yangi variant
+          </button>
+
+          <button type="button" onclick="toggleMobilePalette()" class="btn btn-outline mobile-only-btn" style="padding:7px 11px; font-size:12px;">
+            <span>Xarita</span>
+            <span id="mobile-ans-badge" style="background:var(--primary); color:#fff; padding:1px 6px; border-radius:6px; font-size:10.5px;">0/45</span>
+          </button>
+
+          <div id="timer-pill" class="timer-badge">
+            <span>⏱</span>
+            <span id="timer-text">03:00:00</span>
+          </div>
+
+          <button type="button" onclick="togglePauseTimer()" id="pause-timer-btn" title="Vaqtni to‘xtatish / davom ettirish" class="btn btn-outline desktop-only-btn" style="padding:7px 10px;">
+            <span id="pause-btn-icon">❚❚</span>
+          </button>
+
+          <button type="button" onclick="openFinishModal()" class="btn btn-success" style="padding:8px 14px;">
+            Yakunlash
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="container workspace-grid" style="width:100%; flex:1;">
+      <!-- Main Question Stage -->
+      <div style="min-width:0;">
+        <div class="card" style="padding:14px 18px; margin-bottom:14px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span id="current-sec-badge" style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--primary);">1-bo‘lim</span>
+              <span id="current-q-type-tag" class="badge" style="background:var(--bg-muted); color:var(--text-secondary);">Yopiq test</span>
+            </div>
+            <div id="current-sec-title" style="font-size:14.5px; font-weight:700; color:var(--text-main); margin-top:2px;">
+              Grammatika va tilshunoslik
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" onclick="clearCurrentAnswer()" class="btn btn-outline" style="padding:7px 12px; font-size:12px; color:var(--text-secondary);">
+              Tozalash
+            </button>
+            <button type="button" onclick="toggleFlag()" id="flag-toggle-btn" class="btn btn-outline" style="padding:7px 12px; font-size:12px;">
+              <span>⚑</span>
+              <span id="flag-btn-label">Belgilash</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="question-stage"></div>
+
+        <div class="card" style="padding:14px 18px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <button type="button" onclick="prevQuestion()" id="prev-q-btn" class="btn btn-outline">
+            <span>← Oldingi</span>
+          </button>
+
+          <div style="font-size:13px; font-weight:600; color:var(--text-muted);">
+            Topshiriq <strong id="nav-q-indicator" style="color:var(--text-main); font-weight:800;">1</strong> / 45
+          </div>
+
+          <button type="button" onclick="nextQuestion()" id="next-q-btn" class="btn btn-primary">
+            <span>Keyingi →</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Desktop Palette Sidebar -->
+      <aside class="sidebar-panel">
+        <div class="card" style="padding:18px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+            <span style="font-size:13.5px; font-weight:800;">Savollar xaritasi</span>
+            <span style="font-size:11.5px; color:var(--text-muted); font-weight:600;">1–45</span>
+          </div>
+
+          <div class="legend-grid">
+            <div class="legend-item"><span class="legend-box" style="background:var(--primary);"></span> Javoblangan</div>
+            <div class="legend-item"><span class="legend-box" style="background:#fff; border:1px solid var(--border-strong);"></span> Javobsiz</div>
+            <div class="legend-item"><span class="legend-box" style="background:#fbbf24;"></span> Belgilangan</div>
+            <div class="legend-item"><span class="legend-box" style="background:#fff; outline:2px solid #0f172a;"></span> Joriy</div>
+          </div>
+
+          <div id="desktop-palette-grid" class="palette-grid"></div>
+
+          <button type="button" onclick="jumpToQuestion(45)" class="btn btn-soft-success" style="width:100%; margin-top:12px; justify-content:space-between;">
+            <span>45-topshiriq: Esse</span>
+            <span id="sidebar-essay-badge" style="background:#fff; padding:2px 8px; border-radius:6px; font-size:11px; border:1px solid #a7f3d0;">0 so‘z</span>
+          </button>
+
+          <button type="button" onclick="startFreshRandomExam()" class="btn btn-outline" style="width:100%; margin-top:8px; font-size:12px;">
+            ↻ Yangi variant (aralashtirish)
+          </button>
+
+          <div style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:12px; padding-top:10px; border-top:1px solid var(--border-light);">
+            Muallif: <strong style="color:var(--text-main);">Raxmatov Umarjon</strong>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="site-footer no-print">
+      <div style="font-size:12.5px; font-weight:700; color:var(--text-main);">
+        Muallif: <span style="color:var(--primary);">Raxmatov Umarjon</span> • Milliy sertifikat Mock Imtihoni
+      </div>
+    </footer>
+  </div>
+
+  <!-- Mobile Palette Modal -->
+  <div id="mobile-palette-modal" class="modal-backdrop hidden" onclick="if(event.target===this) toggleMobilePalette()">
+    <div class="modal-card">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--border-light);">
+        <strong style="font-size:14px;">Savollar navigatsiyasi (1–45)</strong>
+        <button type="button" onclick="toggleMobilePalette()" class="btn btn-outline" style="padding:4px 10px;">✕</button>
+      </div>
+      <div id="mobile-palette-grid" class="palette-grid" style="margin-bottom:12px;"></div>
+      <div style="display:flex; gap:8px;">
+        <button type="button" onclick="jumpToQuestion(45); toggleMobilePalette();" class="btn btn-soft-success" style="flex:1;">
+          45-Esse
+        </button>
+        <button type="button" onclick="toggleMobilePalette(); startFreshRandomExam();" class="btn btn-outline" style="flex:1;">
+          Yangi variant
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Finish Modal -->
+  <div id="finish-confirm-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeFinishModal()">
+    <div class="modal-card">
+      <h3 style="margin:0 0 8px; font-size:17px; font-weight:800;">Imtihonni yakunlaysizmi?</h3>
+      <p id="finish-summary-text" style="margin:0 0 18px; font-size:13.5px; color:var(--text-secondary);"></p>
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="closeFinishModal()" class="btn btn-outline">Davom etish</button>
+        <button type="button" onclick="submitExam()" class="btn btn-success">Ha, yakunlash</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       3. RESULTS & ANALYTICS SCREEN
+       ===================================================================== -->
+  <div id="results-screen" class="hidden" style="min-height:100vh; padding-bottom:48px;">
+    <header class="top-header no-print">
+      <div class="container header-inner">
+        <div class="brand-group">
+          <div class="ru-badge">RU</div>
+          <div>
+            <div style="font-size:14.5px; font-weight:800;">Natijalar va batafsil tahlil</div>
+            <div style="font-size:11.5px; color:var(--text-muted);">
+              <span id="res-variant-label">Variant 1</span> • Muallif: <strong style="color:var(--primary);">Raxmatov Umarjon</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <button type="button" onclick="window.print()" class="btn btn-outline">Chop etish / PDF</button>
+          <button type="button" onclick="startFreshRandomExam()" class="btn btn-primary">Yangi variant boshlash</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container" style="padding-top:22px;">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Test qismi (1–44)</div>
+          <div style="margin-top:8px; display:flex; align-items:baseline; gap:6px;">
+            <span id="res-test-points" style="font-size:28px; font-weight:800; color:var(--primary);">0.0</span>
+            <span style="font-size:12px; color:var(--text-muted); font-weight:600;">/ 51.0 ball</span>
+          </div>
+          <div id="res-test-correct-info" style="font-size:12px; color:var(--text-secondary); margin-top:4px;">0 / 44 to‘g‘ri</div>
+        </div>
+
+        <div class="kpi-card">
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Yozma ish / Esse (45)</div>
+          <div style="margin-top:8px; display:flex; align-items:baseline; gap:6px;">
+            <span id="res-essay-points" style="font-size:28px; font-weight:800; color:var(--success);">0.0</span>
+            <span style="font-size:12px; color:var(--text-muted); font-weight:600;">/ 24.0 ball</span>
+          </div>
+          <div id="res-essay-meta" style="font-size:12px; color:var(--text-secondary); margin-top:4px;">0 so‘z • 12 mezon</div>
+        </div>
+
+        <div class="kpi-card">
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Umumiy ball</div>
+          <div style="margin-top:8px; display:flex; align-items:baseline; gap:6px;">
+            <span id="res-total-points" style="font-size:28px; font-weight:800; color:var(--text-main);">0.0</span>
+            <span style="font-size:12px; color:var(--text-muted); font-weight:600;">/ 75.0 ball</span>
+          </div>
+          <div id="res-total-percent" style="font-size:12px; color:var(--text-secondary); margin-top:4px;">0% ko‘rsatkich</div>
+        </div>
+
+        <div class="kpi-card dark">
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#a5b4fc;">Sertifikat darajasi</div>
+          <div id="res-cert-level" style="margin-top:8px; font-size:28px; font-weight:800; color:#fcd34d;">—</div>
+          <div id="res-cert-note" style="font-size:12px; color:#e0e7ff; margin-top:4px;">Daraja hisoblanmoqda</div>
+        </div>
+      </div>
+
+      <section class="card" style="padding:20px; margin-top:18px;">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; margin-bottom:14px;">
+          <h2 style="margin:0; font-size:15px; font-weight:800;">Bo‘limlar kesimida natijalar</h2>
+          <span style="font-size:12px; color:var(--text-muted);">Har bir bo‘lim bo‘yicha aniqlik</span>
+        </div>
+        <div id="section-breakdown-grid" class="breakdown-grid"></div>
+      </section>
+
+      <section class="card" style="margin-top:18px; overflow:hidden;">
+        <div style="background:#064e3b; color:#ffffff; padding:16px 22px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;">
+          <div>
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#6ee7b7;">45-topshiriq tahlili</div>
+            <h2 style="margin:2px 0 0; font-size:16px; font-weight:800;">Argumentativ Esse — UZBMB 12 mezon bo‘yicha baholash</h2>
+          </div>
+          <span class="badge" style="background:rgba(255,255,255,0.14); color:#ecfdf5;">24.0 ballik shkala</span>
+        </div>
+        <div id="exam-essay-report" style="padding:20px;"></div>
+      </section>
+
+      <section class="card" style="margin-top:18px; overflow:hidden;">
+        <div class="no-print" style="padding:16px 22px; border-bottom:1px solid var(--border-light); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;">
+          <div>
+            <h2 style="margin:0; font-size:16px; font-weight:800;">1–44-topshiriqlar tahlili va to‘g‘ri javoblar</h2>
+            <div style="font-size:12px; color:var(--text-muted);">Javobingiz, to‘g‘ri javob va qisqa tushuntirish</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" onclick="setReviewFilter('all')" id="filter-btn-all" class="btn btn-primary" style="padding:7px 14px; font-size:12px;">
+              Barchasi (44)
+            </button>
+            <button type="button" onclick="setReviewFilter('wrong')" id="filter-btn-wrong" class="btn btn-outline" style="padding:7px 14px; font-size:12px; color:var(--danger); border-color:#fecdd3; background:var(--danger-soft);">
+              Faqat xatolar
+            </button>
+          </div>
+        </div>
+        <div id="review-questions-container"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer" style="margin-top:32px;">
+      <div style="font-size:12.5px; font-weight:700;">
+        Muallif: <strong style="color:var(--primary);">Raxmatov Umarjon</strong> • Ona tili va adabiyot — Milliy sertifikat (To‘liq Mock Imtihon)
+      </div>
+    </footer>
+  </div>
+
+  <!-- =====================================================================
+       4. STANDALONE ESSAY EVALUATOR MODAL
+       ===================================================================== -->
+  <div id="standalone-essay-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeStandaloneEssayModal()">
+    <div class="modal-card wide">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding-bottom:12px; border-bottom:1px solid var(--border-light); margin-bottom:14px;">
+        <div>
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--success);">UZBMB 12 mezon • 24 ball</div>
+          <h3 style="margin:2px 0 0; font-size:17px; font-weight:800;">Faqat Esseni Tekshirish (AI)</h3>
+          <div style="font-size:11.5px; color:var(--text-muted);">Muallif: Raxmatov Umarjon</div>
+        </div>
+        <button type="button" onclick="closeStandaloneEssayModal()" class="btn btn-outline" style="padding:6px 12px;">✕</button>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">Esse mavzusi / muammosi:</label>
+        <textarea id="standalone-topic-input" rows="2" class="textarea-input" style="min-height:auto;"></textarea>
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; margin-bottom:5px;">
+          <label style="font-size:12px; font-weight:700;">Esse matni:</label>
+          <button type="button" onclick="loadSampleEssayIntoStandalone()" style="background:none; border:none; color:var(--primary); font-size:12px; font-weight:700; padding:0;">
+            Namuna esse qo‘yish
+          </button>
+        </div>
+        <textarea id="standalone-essay-input" rows="8" oninput="updateStandaloneWordCount()" placeholder="Esseni shu yerga yozing yoki joylashtiring..." class="textarea-input essay-textarea"></textarea>
+      </div>
+
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;">
+        <span id="standalone-wc-label" style="font-size:12px; font-weight:700; color:var(--text-muted);">So‘zlar: 0 | Belgilar: 0</span>
+        <button type="button" onclick="runStandaloneEssayEvaluation()" class="btn btn-success">
+          12 mezon bo‘yicha tekshirish
+        </button>
+      </div>
+
+      <div id="standalone-essay-output" class="hidden" style="margin-top:18px; padding-top:16px; border-top:1px solid var(--border-light);"></div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. MULTI-VARIANT EXAM DATA (VARIANT 1, VARIANT 2, VARIANT 3 — 45 TASKS EACH)
+    // =========================================================================
+    const SAMPLE_ESSAY = `Zamonaviy axborot jamiyatida raqamli texnologiyalar va sun’iy intellekt vositalari hayotimizning ajralmas qismiga aylandi. Ayrim tadqiqotchilar tezkor ma’lumot olish odati insonni yuzaki fikrlashga o‘rgatib, badiiy mutolaa madaniyatini susaytirishi mumkinligidan ogohlantiradi. Menimcha, texnologiyaning o‘zi emas, balki undan foydalanish madaniyati hal qiluvchi ahamiyatga ega: to‘g‘ri yo‘naltirilgan raqamli vositalar tafakkurni boyitadi, biroq tanqidiy fikrlash bilan uyg‘unlashmasa, tayyor javoblarga bog‘lanib qolish xavfini tug‘diradi.
+
+Birinchidan, raqamli muhit bilim olish imkoniyatlarini sezilarli kengaytiradi. Masalan, avvallari faqat yirik kutubxonalarda saqlangan ilmiy manbalar, lug‘atlar va adabiy meros namunalari bugun bir necha soniyada topiladi. Bu esa izlanuvchiga turli qarashlarni solishtirish va kengroq tasavvur hosil qilishga yordam beradi.
+
+Ikkinchidan, tezlik tafakkur chuqurligining o‘rnini bosa olmaydi. Badiiy asar yoki murakkab ilmiy matnni o‘qish insonni sabrga, kontekstni his qilishga va mustaqil xulosa chiqarishga o‘rgatadi. Agar o‘quvchi muammoni o‘zi tahlil qilmasdan, faqat tayyor xulosalarga tayansa, mustaqil fikrlash ko‘nikmasi kuchsizlanadi.
+
+Xulosa qilib aytganda, raqamli texnologiyalar va kitobxonlik bir-biriga zid hodisalar emas. Ongli va tanqidiy yondashuv qaror topgandagina texnologiya tafakkurni cheklamaydi, aksincha, uni chuqurlashtirishga xizmat qiladi.`;
+
+    const EXAM_VARIANTS = [
+      // ---------------- VARIANT 1 ----------------
+      {
+        id: 1,
+        label: "Variant 1",
+        scientificPassage: {
+          title: "Ilmiy-ommabop matn: Xotira, e’tibor va raqamli muhit",
+          source: "Zamonaviy kognitiv tilshunoslik va psixologiya materiallari asosida",
+          paragraphs: [
+            "Inson ongida ma’lumotni saqlash va qayta tiklash jarayoni qadimdan tadqiqotchilar diqqat markazida bo‘lib kelgan. Qadimgi yunon faylasuflari xotirani mum taxtachadagi izga qiyoslagan bo‘lsalar, bugungi neyrofiziologiya va kognitiv fanlar xotirani faqat passiv ombor emas, balki faol qayta qurish (rekonstruksiya) mexanizmi sifatida talqin etadi.",
+            "So‘nggi yillarda raqamli qidiruv tizimlari va qisqa videokontentlarning keng tarqalishi o‘quvchilarning diqqatni jamlash ko‘nikmasiga sezilarli ta’sir ko‘rsatmoqda. Tadqiqotchilar buni «transaktiv xotira» hodisasi bilan bog‘laydilar: inson ma’lum faktning o‘zini emas, balki uni qayerdan topish mumkinligini eslab qolishga moyil bo‘ladi.",
+            "Tilshunoslik nuqtayi nazaridan qaraganda, matnni chuqur o‘qib tushunish — bu shunchaki so‘zlar va gaplar ketma-ketligini tanish emas, balki yashirin mantiqiy bog‘lanishlarni, muallif pozitsiyasini va kontekstual ma’nolarni anglashdir."
+          ]
+        },
+        literaryPassage: {
+          title: "Badiiy matn parchasi: «Kuzgi bog‘dagi suhbat»",
+          source: "Badiiy nasriy namuna",
+          paragraphs: [
+            "Oktyabrning tiniq tongida bog‘ ichidagi so‘qmoqqa to‘kilgan zarhal barglar qadam bosilganda mayin shitirlardi. Bobo qo‘lidagi eski qaychi bilan olma novdasidagi qurigan shoxchani ehtiyotkorlik bilan kesdi-da, bir zum osmonga qaradi.",
+            "— Shoshma, o‘g‘lim, — dedi bobo nabirasiga yuzlanib. — Daraxtning ham o‘z hisobi bor. Ortig‘ini kesib tashlasang, ko‘klamda quvvati kamayadi; kam kesang, shoxlar bir-biriga soya solib, meva shirasini to‘liq tortmaydi. Hayot ham shunaqa: vaqtida voz kechishni bilish ham, asrab avaylashni bilish ham birdek zarur.",
+            "Nabira boboning qo‘llaridagi chuqur chiziqlarga, so‘ngra quyosh nuri tushib turgan yaproqlarga qaradi. Ilk bor unga vaqt o‘tishi yo‘qotish emas, balki tajribaning tiniqlashuvi bo‘lib tuyuldi."
+          ]
+        },
+        ghazal: {
+          title: "Alisher Navoiy g‘azalidan baytlar (1-variant)",
+          lines: [
+            "1. Ey sabo, ahvolimizdin yaxshi ro‘shan aylag‘il,",
+            "    Kim, g‘amingdin xasta ko‘nglum bo‘ldi vayron, aylag‘il.",
+            "2. Gar visolingdin muyassar bo‘lmasa bir lahzalik,",
+            "    Hajr o‘tidin bag‘rimi qon etma, ehson aylag‘il.",
+            "3. Lutf ila bir qatra suv bermas mening ko‘nglumga charx,",
+            "    Gar berur bo‘lsa, balo o‘qin farovon aylag‘il."
+          ]
+        },
+        independentQ1_15: [
+          { id: 1, points: 1.1, typeLabel: "Imlo me’yori", question: "Qaysi qatorda imlo qoidasiga muvofiq yozilgan so‘zlar berilgan?", options: ["ishtiyoqmand, xushomadgo‘y, qahramonona", "ishtiyokmand, xushomadgo‘y, qahramonona", "ishtiyoqmand, hushomadgo‘y, qahramonona", "ishtiyoqmand, xushomadgo‘y, qaxramonona"], correctText: "ishtiyoqmand, xushomadgo‘y, qahramonona", explanation: "«Ishtiyoqmand» (q bilan), «xushomadgo‘y» (x bilan), «qahramonona» (h bilan) — adabiy imlo me’yoriga ko‘ra to‘g‘ri." },
+          { id: 2, points: 1.1, typeLabel: "Paronimlar", question: "«Mutaxassis yangi loyihaning barcha ... jihatlarini atroflicha tahlil qildi» gapida nuqtalar o‘rniga qaysi so‘z mos?", options: ["amaliy", "amali", "amalga", "amallash"], correctText: "amaliy", explanation: "«Amaliy jihatlar» birikmasida «amaliy» nisbiy sifati qo‘llanadi." },
+          { id: 3, points: 1.1, typeLabel: "Ravishdosh", question: "Qaysi gapda ravishdosh shaklidagi so‘z hol vazifasida kelgan?", options: ["Kitobni o‘qiy-o‘qiy, ko‘p yangi atamalarni yozib oldim.", "O‘qigan kitobim menga juda manzur bo‘ldi.", "Uning aytgan gaplari barchani o‘ylantirib qo‘ydi.", "Ertangi yig‘ilishga barcha tayyorgarlik ko‘rilgan."], correctText: "Kitobni o‘qiy-o‘qiy, ko‘p yangi atamalarni yozib oldim.", explanation: "«O‘qiy-o‘qiy» — takrorlangan ravishdosh, gapda payt/hol vazifasida." },
+          { id: 4, points: 1.1, typeLabel: "Qo‘shma so‘zlar", question: "Qaysi qatordagi qo‘shma so‘zlar qo‘shib yoziladi?", options: ["ko‘ksulton, oshqozon, beshqarsak", "ko‘k sulton, osh qozon, besh qarsak", "ko‘ksulton, osh qozon, beshqarsak", "ko‘k-sulton, oshqozon, besh-qarsak"], correctText: "ko‘ksulton, oshqozon, beshqarsak", explanation: "Ushbu qo‘shma otlar qo‘shib yoziladi." },
+          { id: 5, points: 1.1, typeLabel: "Fonetika", question: "«Toshkent» so‘zi jonli talaffuzda qanday o‘zgarishga uchraydi?", options: ["[sh] tovushi jarangsizlashadi", "[n] + [k] birikmasida [n] orqa tanglay [ŋ] tusiga kiradi", "[o] tovushi [a] ga aylanadi", "Hech qanday o‘zgarish bo‘lmaydi"], correctText: "[n] + [k] birikmasida [n] orqa tanglay [ŋ] tusiga kiradi", explanation: "Til orqa [k] oldida [n] tovushi sayozlashib, [ŋ] ga yaqinlashadi." },
+          { id: 6, points: 1.1, typeLabel: "Sintaksis", question: "«Bahor kelishi bilan bog‘lar yashillikka burkandi» gapida «bahor kelishi bilan» qanday bo‘lak?", options: ["Payt holi", "Sabab holi", "Maqsad holi", "To‘ldiruvchi"], correctText: "Payt holi", explanation: "«Qachon?» so‘rog‘iga javob bo‘luvchi payt holi." },
+          { id: 7, points: 1.1, typeLabel: "Tinish belgilari", question: "Qaysi gapda kirish so‘z vergul bilan to‘g‘ri ajratilgan?", options: ["Menimcha, bu qaror barcha uchun foydali bo‘ladi.", "Menimcha bu qaror barcha uchun foydali bo‘ladi.", "Menimcha, bu qaror, barcha uchun foydali bo‘ladi.", "Menimcha bu qaror, barcha uchun foydali bo‘ladi."], correctText: "Menimcha, bu qaror barcha uchun foydali bo‘ladi.", explanation: "Gap boshidagi «Menimcha» kirish so‘zidan keyin vergul qo‘yiladi." },
+          { id: 8, points: 1.1, typeLabel: "Leksikologiya", question: "Qaysi qatorda o‘zlashma so‘zlar berilgan?", options: ["kitob, maktab, xalq, qalam", "yer, quyosh, suv, tosh", "ko‘z, qo‘l, oyoq, bosh", "uy, tog‘, daryo, o‘rmon"], correctText: "kitob, maktab, xalq, qalam", explanation: "«Kitob, maktab, xalq, qalam» — arabcha o‘zlashmalar." },
+          { id: 9, points: 1.1, typeLabel: "Olmosh", question: "Qaysi so‘zda olmosh turi noto‘g‘ri ko‘rsatilgan?", options: ["barcha — so‘roq olmoshi", "o‘zim — o‘zlik olmoshi", "kimdir — gumon olmoshi", "shu — ko‘rsatish olmoshi"], correctText: "barcha — so‘roq olmoshi", explanation: "«Barcha» — belgilash olmoshi." },
+          { id: 10, points: 1.1, typeLabel: "Qo‘shma gap", question: "«Quyosh chiqdi va atrof nurga to‘ldi» qanday qo‘shma gap?", options: ["Bog‘langan qo‘shma gap", "Bog‘lovchisiz qo‘shma gap", "Ergashgan qo‘shma gap", "Sodda yig‘iq gap"], correctText: "Bog‘langan qo‘shma gap", explanation: "«Va» teng bog‘lovchisi bilan bog‘langan." },
+          { id: 11, points: 1.1, typeLabel: "Uslubiyat", question: "Rasmiy-idoraviy uslubning asosiy belgisi qaysi?", options: ["Aniqlik, qisqalik va qoliplashgan me’yor", "Badiiy san’atlar va ko‘chma ma’nolar", "Shevaga xos erkin nutq", "Mubolag‘a va kinoya"], correctText: "Aniqlik, qisqalik va qoliplashgan me’yor", explanation: "Rasmiy uslubda aniqlik va me’yor ustuvor." },
+          { id: 12, points: 1.1, typeLabel: "Frazeologiya", question: "«Yuragi shuv etdi» iborasi nimani bildiradi?", options: ["Qattiq cho‘chidi, vahimaga tushdi", "Juda quvondi", "Qattiq uyqusi keldi", "G‘azablandi"], correctText: "Qattiq cho‘chidi, vahimaga tushdi", explanation: "To‘satdan qo‘rqish holatini ifodalaydi." },
+          { id: 13, points: 1.1, typeLabel: "Fe’l nisbatlari", question: "«O‘qit-» fe’lidagi «-it» qanday nisbat qo‘shimchasi?", options: ["Orttirma nisbat", "Majhul nisbat", "O‘zlik nisbat", "Birgalik nisbat"], correctText: "Orttirma nisbat", explanation: "«O‘qimoq» -> «o‘qitmoq» — orttirma nisbat." },
+          { id: 14, points: 1.1, typeLabel: "Tire qo‘llanishi", question: "Tire qaysi gapda to‘g‘ri qo‘llangan?", options: ["Kitob — bilim bulog‘i.", "Kitob — bilim — bulog‘i.", "Kitob-bilim bulog‘i.", "Kitob, — bilim bulog‘i."], correctText: "Kitob — bilim bulog‘i.", explanation: "Ega va kesim ot bilan ifodalanganda bog‘lama o‘rnida tire qo‘yiladi." },
+          { id: 15, points: 1.1, typeLabel: "Gap bo‘laklari", question: "«U bugun kutubxonaga borishini aytdi» gapida «kutubxonaga borishini» qanday bo‘lak?", options: ["To‘ldiruvchi", "Aniqlovchi", "Hol", "Kesim"], correctText: "To‘ldiruvchi", explanation: "«Nimani aytdi?» so‘rog‘iga javob bo‘lgan vositasiz to‘ldiruvchi." }
+        ],
+        passageQ16_20: [
+          { id: 16, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Zamonaviy kognitiv fanlar xotirani qanday talqin etadi?", options: ["Faol qayta qurish (rekonstruksiya) mexanizmi sifatida", "Faqat passiv ombor sifatida", "O‘zgarmas videoyozuv sifatida", "Faqat qisqa muddatli xotira sifatida"], correctText: "Faol qayta qurish (rekonstruksiya) mexanizmi sifatida", explanation: "1-xatboshida xotira faol qayta qurish mexanizmi sifatida ko‘rsatilgan." },
+          { id: 17, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "«Transaktiv xotira» hodisasi nimani anglatadi?", options: ["Faktning o‘zini emas, uni qayerdan topishni eslab qolishni", "Barcha ma’lumotlarni yodlashni", "Faqat og‘zaki nutqni", "Tezkor o‘qish tezligini"], correctText: "Faktning o‘zini emas, uni qayerdan topishni eslab qolishni", explanation: "2-xatboshida fakt o‘rniga uni qayerdan topishni eslab qolish izohlangan." },
+          { id: 18, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Raqamli muhitda qanday qiyinchilik qayd etilgan?", options: ["Chuqur tahliliy tafakkur va uzoq muddatli tushunchani shakllantirishda qiyinchilik", "Qidiruv tizimlarining yo‘qligi", "Kitoblarning kamayishi", "Yozuvning o‘zgarishi"], correctText: "Chuqur tahliliy tafakkur va uzoq muddatli tushunchani shakllantirishda qiyinchilik", explanation: "2-xatboshi oxirida chuqur tahliliy tafakkur masalasi aytilgan." },
+          { id: 19, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Tilshunoslik nuqtayi nazaridan chuqur o‘qib tushunish nimani bildiradi?", options: ["Yashirin mantiqiy bog‘lanishlar va kontekstual ma’nolarni anglashni", "Faqat so‘zlarni sanashni", "Ovoz chiqarib o‘qishni", "Tinish belgilarini belgilashni"], correctText: "Yashirin mantiqiy bog‘lanishlar va kontekstual ma’nolarni anglashni", explanation: "3-xatboshida yashirin mantiqiy bog‘lanishlar va kontekstual ma’nolar ta’kidlangan." },
+          { id: 20, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Matnning asosiy g‘oyasi qaysi?", options: ["Axborotga tez yetish bilan birga uni saralash va asoslash madaniyati zarur", "Texnologiyalardan voz kechish kerak", "Xotira faqat bolalikda ishlaydi", "Tahlil shart emas"], correctText: "Axborotga tez yetish bilan birga uni saralash va asoslash madaniyati zarur", explanation: "Matn axborotni saralash va mantiqan asoslash madaniyatiga chorlaydi." }
+        ],
+        passageQ21_25: [
+          { id: 21, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Boboning novdani kesishdagi ehtiyotkorligi qanday ma’noni anglatadi?", options: ["Hayotda me’yor va oqibatni hisobga olish zarurligini", "Qaychining o‘tkir emasligini", "Daraxtning quriganini", "Kuz tugaganini"], correctText: "Hayotda me’yor va oqibatni hisobga olish zarurligini", explanation: "Bobo ortiqcha yoki kam kesish oqibatini hayot falsafasiga bog‘laydi." },
+          { id: 22, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "«Zarhal barglar» birikmasi qanday badiiy ifoda?", options: ["Oltinrang tusga kirgan kuzgi barglarning obrazli tasviri", "Mubolag‘a", "Kinoya", "Istehzo"], correctText: "Oltinrang tusga kirgan kuzgi barglarning obrazli tasviri", explanation: "Barglarning yaltirash holati «zarhal» so‘zi bilan tasvirlangan." },
+          { id: 23, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Nabiraning ichki o‘zgarishi qaysi fikrda ko‘rinadi?", options: ["Vaqt o‘tishi yo‘qotish emas, tajribaning tiniqlashuvi ekanini anglashida", "Bog‘dan chiqib ketishida", "Qaychini olishida", "Sukut saqlashida"], correctText: "Vaqt o‘tishi yo‘qotish emas, tajribaning tiniqlashuvi ekanini anglashida", explanation: "Oxirgi gapda nabiraning vaqtga yangicha qarashi aks etgan." },
+          { id: 24, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Matn ohangi qanday?", options: ["Sokin, falsafiy va mulohazakor", "Keskin va dramatik", "Hazil-mutoyibali", "Rasmiy-huquqiy"], correctText: "Sokin, falsafiy va mulohazakor", explanation: "Kuzgi bog‘ manzarasi va bobo-nabira suhbati sokin-falsafiy ohangda." },
+          { id: 25, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "«Voz kechishni bilish ham, asrab avaylashni bilish ham birdek zarur» gapida nima ifodalangan?", options: ["Muvozanat va parallelizm g‘oyasi", "Ritorik so‘roq", "Kinoya", "Pafos"], correctText: "Muvozanat va parallelizm g‘oyasi", explanation: "Ikki zid harakatning muvozanati parallel ifodalangan." }
+        ],
+        ghazalQ26_28: [
+          { id: 26, points: 1.2, typeLabel: "G‘azal tahlili • 26–28", question: "1-baytdagi «ro‘shan aylag‘il» birikmasining ma’nosi nima?", options: ["Ravshan, ayon qilgil", "Yashirib qo‘ygil", "Unutib yuborgil", "Qorong‘ulashtirgil"], correctText: "Ravshan, ayon qilgil", explanation: "«Ro‘shan» — ravshan, aniq, ma’lum." },
+          { id: 27, points: 1.2, typeLabel: "G‘azal tahlili • 26–28", question: "2-baytdagi «Hajr o‘tidin» ifodasida qanday san’at bor?", options: ["Istiora (hijron azobining olovga qiyoslanishi)", "Talmeh", "Husni ta’lil", "Tajnis"], correctText: "Istiora (hijron azobining olovga qiyoslanishi)", explanation: "Hijron azobi «o‘t» obraziga ko‘chirilgan." },
+          { id: 28, points: 1.2, typeLabel: "G‘azal tahlili • 26–28", question: "Baytlarda lirik qahramon ruhiyati qanday?", options: ["Hijron azobidan iztirobli, ammo umidvor va iltijoli", "Befaroy va loqayd", "G‘olibona va mag‘rur", "Satirik"], correctText: "Hijron azobidan iztirobli, ammo umidvor va iltijoli", explanation: "Oshiq saboga murojaat qilib, holini izhor etmoqda." }
+        ],
+        litIndependentQ29_32: [
+          { id: 29, points: 1.2, typeLabel: "Adabiyot tarixi", question: "Abdulla Qodiriyning «O‘tkan kunlar» romanida voqealar qaysi davr fonida tasvirlanadi?", options: ["XIX asr o‘rtalaridagi tarixiy jarayonlar fonida", "Amir Temur davri", "XV asr Hirot", "XXI asr boshlari"], correctText: "XIX asr o‘rtalaridagi tarixiy jarayonlar fonida", explanation: "Roman XIX asr o‘rtalaridagi ijtimoiy-tarixiy muhitni yoritadi." },
+          { id: 30, points: 1.2, typeLabel: "Badiiy san’atlar", question: "Fikrni maqol yoki hikmatli misol bilan dalillash san’ati nima deyiladi?", options: ["Tamsil (irsoli masal)", "Tashbeh", "Tajnis", "Laffu nashr"], correctText: "Tamsil (irsoli masal)", explanation: "Tamsil (irsoli masal)da fikr hikmat/maqol bilan isbotlanadi." },
+          { id: 31, points: 1.2, typeLabel: "Adabiyot nazariyasi", question: "Badiiy asarda vaqt va makon yaxlitligi adabiyotshunoslikda qanday ataladi?", options: ["Xronotop", "Radif", "Qofiya", "Matla’"], correctText: "Xronotop", explanation: "Badiiy vaqt va makon birligi — xronotop." },
+          { id: 32, points: 1.2, typeLabel: "O‘zbek adabiyoti", question: "Cho‘lponning «Kecha va kunduz» romanidagi asosiy qahramonlardan biri kim?", options: ["Miryoqub", "Otabek", "Ulug‘bek", "Alisher"], correctText: "Miryoqub", explanation: "Miryoqub «Kecha va kunduz» romanining markaziy obrazlaridan biri." }
+        ],
+        matchingQ33_35: [
+          { id: 33, points: 1.2, typeLabel: "Moslashtirish (33–35)", question: "33-moslashtirish: «Xamsa» dostonlari va bosh qahramonlarini moslang (1-Farhod va Shirin, 2-Layli va Majnun, 3-Sab’ai sayyor).", options: ["1-Farhod, 2-Qays (Majnun), 3-Bahrom Go‘r", "1-Bahrom Go‘r, 2-Farhod, 3-Qays", "1-Qays, 2-Bahrom Go‘r, 3-Farhod", "1-Farhod, 2-Bahrom Go‘r, 3-Qays"], correctText: "1-Farhod, 2-Qays (Majnun), 3-Bahrom Go‘r", explanation: "Har bir dostonning bosh qahramoni to‘g‘ri moslashtirilgan." },
+          { id: 34, points: 1.2, typeLabel: "Moslashtirish (33–35)", question: "34-moslashtirish: Muallif va asarni moslang: (1) Oybek, (2) Said Ahmad, (3) Erkin Vohidov.", options: ["1-«Qutlug‘ qon», 2-«Ufq», 3-«Ruhlar isyoni»", "1-«Ufq», 2-«Ruhlar isyoni», 3-«Qutlug‘ qon»", "1-«Ruhlar isyoni», 2-«Qutlug‘ qon», 3-«Ufq»", "1-«Qutlug‘ qon», 2-«Ruhlar isyoni», 3-«Ufq»"], correctText: "1-«Qutlug‘ qon», 2-«Ufq», 3-«Ruhlar isyoni»", explanation: "Mualliflar va ularning mashhur asarlari to‘g‘ri moslangan." },
+          { id: 35, points: 1.2, typeLabel: "Moslashtirish (33–35)", question: "35-moslashtirish: She’riy terminlar va ta’rifini moslang: (1) Qofiya, (2) Radif, (3) Matla’.", options: ["1-ohangdosh so‘z/qism, 2-qofiyadan keyingi takror so‘z, 3-g‘azalning birinchi bayti", "1-oxirgi bayt, 2-vazn o‘lchovi, 3-band turi", "1-vazn, 2-san’at, 3-maqta’", "1-radif, 2-matla’, 3-qofiya"], correctText: "1-ohangdosh so‘z/qism, 2-qofiyadan keyingi takror so‘z, 3-g‘azalning birinchi bayti", explanation: "Qofiya, radif va matla’ tushunchalari to‘g‘ri berilgan." }
+        ],
+        openQ36_44: [
+          { id: 36, points: 1.2, typeLabel: "Sintaksis", question: "«Yomg‘ir yog‘gandan keyin havo musaffolashdi» gapida «qachon?» so‘rog‘iga javob bo‘luvchi bo‘lak turini yozing.", accepted: ["payt holi", "payt"], displayAnswer: "Payt holi", explanation: "Harakatning paytini bildiruvchi payt holi." },
+          { id: 37, points: 1.2, typeLabel: "Badiiy san’at", question: "Jonsiz narsaga insonga xos xususiyat ko‘chiriladigan badiiy san’at nomini yozing.", accepted: ["tashxis", "jonlantirish"], displayAnswer: "Tashxis (jonlantirish)", explanation: "Tashxis (jonlantirish) san’ati." },
+          { id: 38, points: 1.2, typeLabel: "Frazeologiya", question: "«Juda xursand bo‘lmoq» ma’nosini beruvchi o‘zbekcha iborani yozing.", accepted: ["terisiga sigmay ketdi", "terisiga sig‘may ketdi", "ogzi qulogida", "og‘zi qulog‘ida"], displayAnswer: "Terisiga sig‘may ketdi / Og‘zi qulog‘ida", explanation: "Haddan tashqari quvonch iborasi." },
+          { id: 39, points: 1.2, typeLabel: "Morfologiya", question: "«Talabalar» so‘zidagi «-lar» qo‘shimchasi qanday grammatik ma’noni bildiradi?", accepted: ["koplik", "ko‘plik"], displayAnswer: "Ko‘plik", explanation: "Ko‘plik shakli qo‘shimchasi." },
+          { id: 40, points: 1.2, typeLabel: "Mumtoz adabiyot", question: "G‘azalning shoir taxallusi qo‘llanadigan oxirgi bayti nima deyiladi?", accepted: ["maqta", "maqta’"], displayAnswer: "Maqta’", explanation: "G‘azalning yakuniy bayti — maqta’." },
+          { id: 41, points: 1.2, typeLabel: "Leksikologiya", question: "Shakli bir xil, ma’nolari har xil so‘zlar tilshunoslikda qanday ataladi?", accepted: ["omonim", "omonimlar"], displayAnswer: "Omonimlar", explanation: "Shakldosh so‘zlar — omonimlar." },
+          { id: 42, points: 1.2, typeLabel: "Sintaksis", question: "Gapda ish-harakatning predmetini bildiruvchi bosh bo‘lak nima?", accepted: ["ega"], displayAnswer: "Ega", explanation: "Gapning bosh bo‘lagi — ega." },
+          { id: 43, points: 1.2, typeLabel: "Adabiyot", question: "«Kecha va kunduz» romanining muallifi kim?", accepted: ["cholpon", "cho‘lpon", "abdulhamid cholpon", "abdulhamid cho‘lpon"], displayAnswer: "Cho‘lpon", explanation: "Roman muallifi — Cho‘lpon." },
+          { id: 44, points: 1.2, typeLabel: "Punktuatsiya", question: "Ko‘chirma gapdan oldingi muallif gapidan keyin qaysi tinish belgisi qo‘yiladi?", accepted: ["ikki nuqta", ":", "ikki nuqta (:)"], displayAnswer: "Ikki nuqta (:)", explanation: "Muallif gapi -> ikki nuqta -> ko‘chirma gap." }
+        ],
+        essayPrompts: [
+          { id: "v1-p1", title: "1-mavzu: Raqamli texnologiyalar va kitobxonlik", text: "Ayrimlar tezkor raqamli manbalar chuqur tahlil va kitob o‘qish odatini susaytiradi desa, boshqalar raqamli muhit bilim olish imkoniyatlarini kengaytiradi deb hisoblaydi. O‘z pozitsiyangizni dalillar bilan asoslang." },
+          { id: "v1-p2", title: "2-mavzu: An’ana va yangilanish", text: "Milliy qadriyatlarni asrash va yangiliklarga moslashish o‘rtasidagi muvozanat haqida argumentativ esse yozing." },
+          { id: "v1-p3", title: "3-mavzu: Bilimni baholash mezoni", text: "Bilimni faqat test natijasi bilan o‘lchash yetarlimi yoki yozma va tahliliy ko‘nikmalar ham birdek muhimmi? Pozitsiyangizni bayon eting." }
+        ]
+      },
+
+      // ---------------- VARIANT 2 ----------------
+      {
+        id: 2,
+        label: "Variant 2",
+        scientificPassage: {
+          title: "Ilmiy-ommabop matn: Til madaniyati va mantiqiy argumentatsiya",
+          source: "Nutq madaniyati va ritorika asoslari",
+          paragraphs: [
+            "Nutq madaniyati faqat to‘g‘ri talaffuz yoki imlo qoidalarini bilish bilan cheklanmaydi. U fikrni aniq, mantiqiy izchil va tinglovchi/o‘quvchi uchun tushunarli shaklda yetkazish qobiliyatini ham o‘z ichiga oladi. Kuchli nutqning asosi — ravshan tezis va ishonchli dalildir.",
+            "Ilmiy va publitsistik matnlarda sabab-oqibat bog‘lanishlarini to‘g‘ri qurish muhim ahamiyatga ega. Agar dalil mavzuga bevosita aloqador bo‘lmasa yoki faqat hissiy da’voga tayansa, fikrning ishonchliligi pasayadi. Shuning uchun dalilni misol, taqqoslash va mantiqiy xulosa bilan mustahkamlash lozim.",
+            "Zamonaviy kommunikatsiyada qisqalik va mazmun salmog‘i uyg‘unlashishi talab etiladi. Ortib ketgan so‘zlar fikrni xiralashtiradi, aniq tanlangan leksika esa matnning ta’sir kuchini oshiradi."
+          ]
+        },
+        literaryPassage: {
+          title: "Badiiy matn parchasi: «Daryo bo‘yidagi ko‘prik»",
+          source: "Badiiy nasriy namuna",
+          paragraphs: [
+            "Bahor selidan so‘ng daryo suvi loyqalanib, qirg‘oqdagi tol shoxlariga tegib oqardi. Yo‘lovchi yog‘och ko‘prikka yaqinlashar ekan, uning har bir taxtasi o‘tmishning qandaydir xotirasini eslatayotgandek tuyuldi.",
+            "Ko‘prikning o‘rtasida to‘xtab, suvning shiddatli oqimiga tikildi. Suv to‘xtovsiz oqar, ammo qirg‘oq o‘z o‘rnida turardi. Shunda u o‘zgarish va barqarorlik o‘rtasidagi nozik uyg‘unlikni his etdi.",
+            "U ko‘prikdan o‘tib, tog‘ etagidagi qishloq sari yo‘l oldi; yuragida endi ikkilanish emas, balki aniq maqsad bor edi."
+          ]
+        },
+        ghazal: {
+          title: "Alisher Navoiy g‘azalidan baytlar (2-variant)",
+          lines: [
+            "1. Ko‘nglum ichra ishq o‘ti har lahza paydo o‘lg‘usidur,",
+            "    Ashk sayli ko‘zlarimdin oqib, daryo o‘lg‘usidur.",
+            "2. Gar visolingdin judo qilsa falak, ayb etmagil,",
+            "    Kim bu g‘amdin xasta jonim oxiri ado o‘lg‘usidur.",
+            "3. Ey Navoiy, dard ila yozding bu ash’orni netong,",
+            "    Kim bu so‘zlar ahlining ko‘nglida shaydo o‘lg‘usidur."
+          ]
+        },
+        independentQ1_15: [
+          { id: 1, points: 1.1, typeLabel: "Imlo me’yori", question: "Qaysi qatorda chiziqcha (-) bilan to‘g‘ri yozilgan qo‘shma so‘zlar berilgan?", options: ["rang-barang, yonma-yon, uyma-uy", "rangbarang, yonmayon, uyma-uy", "rang-barang, yonmayon, uyma uy", "rangbarang, yonma-yon, uyma uy"], correctText: "rang-barang, yonma-yon, uyma-uy", explanation: "Takrorlanuvchi va juft shakldagi bu so‘zlar chiziqcha bilan yoziladi." },
+          { id: 2, points: 1.1, typeLabel: "Paronimlar", question: "«Yangi qonun loyihasi ... muhokamaga qo‘yildi» gapida nuqtalar o‘rniga mos so‘zni toping.", options: ["keng", "kenglik", "kengaymoq", "kengroq"], correctText: "keng", explanation: "«Keng muhokama» birikmasi uslubiy jihatdan tabiiy va to‘g‘ri." },
+          { id: 3, points: 1.1, typeLabel: "Sifatdosh", question: "Qaysi gapda sifatdosh aniqlovchi vazifasida kelgan?", options: ["O‘qilgan asarlar barchada chuqur taassurot qoldirdi.", "Dars tugagach, o‘quvchilar uyga ketishdi.", "U kitobni o‘qib bo‘ldi.", "Ertaga imtihon boshlanadi."], correctText: "O‘qilgan asarlar barchada chuqur taassurot qoldirdi.", explanation: "«O‘qilgan» sifatdoshi «asarlar» otini aniqlab kelgan." },
+          { id: 4, points: 1.1, typeLabel: "Qo‘shma so‘zlar", question: "Qaysi so‘z qo‘shib yoziladi?", options: ["sarf-nazar emas, balki «so‘z boshi»", "sarf-nazar", "ochiqko‘ngil", "ko‘p yillik"], correctText: "ochiqko‘ngil", explanation: "«Ochiqko‘ngil» qo‘shma sifati qo‘shib yoziladi." },
+          { id: 5, points: 1.1, typeLabel: "Fonetika", question: "Unlilar tasnifida tilning gorizontal harakatiga ko‘ra qaysi guruh mavjud?", options: ["Til oldi, til orqa (va aralash) unlilar", "Lablangan va lablanmagan", "Qisqa va cho‘ziq", "Ochiq va yopiq"], correctText: "Til oldi, til orqa (va aralash) unlilar", explanation: "Tilning gorizontal harakatiga ko‘ra unlilar farqlanadi." },
+          { id: 6, points: 1.1, typeLabel: "Sintaksis", question: "«Intilganga tole yor» maqolining grammatik asosini toping.", options: ["tole yor (ega — tole, kesim — yor)", "intilganga — ega", "tole — hol", "yor — to‘ldiruvchi"], correctText: "tole yor (ega — tole, kesim — yor)", explanation: "Bosh bo‘laklar — ega va kesim." },
+          { id: 7, points: 1.1, typeLabel: "Tinish belgilari", question: "Undalma qaysi gapda to‘g‘ri ajratilgan?", options: ["Do‘stim, ertangi uchrashuvni unutma.", "Do‘stim ertangi uchrashuvni unutma.", "Do‘stim ertangi, uchrashuvni unutma.", "Do‘stim: ertangi uchrashuvni unutma."], correctText: "Do‘stim, ertangi uchrashuvni unutma.", explanation: "Gap boshidagi undalma vergul bilan ajratiladi." },
+          { id: 8, points: 1.1, typeLabel: "Leksikologiya", question: "Ko‘p ma’noli so‘z qaysi qatorda berilgan?", options: ["ko‘z (buloq ko‘zi, uzuk ko‘zi, inson ko‘zi)", "ekskavator", "sinus", "kompyuter"], correctText: "ko‘z (buloq ko‘zi, uzuk ko‘zi, inson ko‘zi)", explanation: "«Ko‘z» so‘zi ma’no ko‘chishi asosida ko‘p ma’noli." },
+          { id: 9, points: 1.1, typeLabel: "Son", question: "Jamlovchi son qo‘shimchasi qaysi?", options: ["-ov / -ala (ikkov, uchala)", "-inchi", "-ta", "-dan"], correctText: "-ov / -ala (ikkov, uchala)", explanation: "«-ov», «-ala» jamlovchi son yasaydi." },
+          { id: 10, points: 1.1, typeLabel: "Ergashgan gap", question: "Sabab ergash gapli qo‘shma gap qaysi?", options: ["Yomg‘ir yog‘gani uchun sayr qoldirildi.", "Quyosh chiqdi va shamol tindi.", "Kim mehnat qilsa, u yutadi.", "Havo sovuq, lekin quyosh porlab turibdi."], correctText: "Yomg‘ir yog‘gani uchun sayr qoldirildi.", explanation: "Sabab ma’nosi ifodalangan." },
+          { id: 11, points: 1.1, typeLabel: "Uslubiyat", question: "Ilmiy uslubga xos xususiyat qaysi?", options: ["Atamalar, aniqlik va isbotlash mantig‘i", "She’riy o‘lchov va qofiya", "So‘zlashuv intonatsiyasi", "Badiiy mubolag‘a"], correctText: "Atamalar, aniqlik va isbotlash mantig‘i", explanation: "Ilmiy uslub terminologiya va dalillikka tayanadi." },
+          { id: 12, points: 1.1, typeLabel: "Frazeologiya", question: "«Qulog‘iga gap kirmaydi» iborasi qanday ma’noni bildiradi?", options: ["Nasihat yoki gapni qabul qilmaydi", "Eshitish qobiliyati yo‘q", "Juda tez eshitadi", "Gapirishni bilmaydi"], correctText: "Nasihat yoki gapni qabul qilmaydi", explanation: "Quloq solmaslik, tinglamaslik ma’nosida." },
+          { id: 13, points: 1.1, typeLabel: "Mayl", question: "«Bugun albatta kutubxonaga boray» gapidagi fe’l qaysi maylda?", options: ["Buyruq-istak mayli", "Shart mayli", "Xabar mayli", "Sifatdosh"], correctText: "Buyruq-istak mayli", explanation: "1-shaxs birlikdagi istak/maqsad ma’nosi buyruq-istak mayliga kiradi." },
+          { id: 14, points: 1.1, typeLabel: "Qo‘shtirnoq", question: "Asar nomi qanday yoziladi?", options: ["«O‘tkan kunlar» romani", "O‘tkan kunlar romani", "(O‘tkan kunlar) romani", "O‘tkan-kunlar romani"], correctText: "«O‘tkan kunlar» romani", explanation: "Asar nomlari qo‘shtirnoq ichida yoziladi." },
+          { id: 15, points: 1.1, typeLabel: "Undov gap", question: "Qaysi gap undov gap hisoblanadi?", options: ["Qanday go‘zal manzara!", "Bugun havo ochiq.", "Siz qachon kelasiz?", "Darsga kechikmang."], correctText: "Qanday go‘zal manzara!", explanation: "His-hayajon bilan aytilgan undov gap." }
+        ],
+        passageQ16_20: [
+          { id: 16, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Matnga ko‘ra nutq madaniyati nimani o‘z ichiga oladi?", options: ["Imlo/talaffuz bilan birga aniq, mantiqiy va tushunarli fikr bayonini", "Faqat chiroyli ovozni", "Faqat yozma matnni", "Faqat lug‘at yodlashni"], correctText: "Imlo/talaffuz bilan birga aniq, mantiqiy va tushunarli fikr bayonini", explanation: "1-xatboshida nutq madaniyatining keng mazmuni yoritilgan." },
+          { id: 17, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Fikrning ishonchliligi qachon pasayishi aytilgan?", options: ["Dalil mavzuga aloqador bo‘lmasa yoki faqat hissiy da’voga tayansa", "Misol keltirilsa", "Mantiqiy xulosa bo‘lsa", "Matn qisqa bo‘lsa"], correctText: "Dalil mavzuga aloqador bo‘lmasa yoki faqat hissiy da’voga tayansa", explanation: "2-xatboshida dalil sifati va asoslanishi tahlil qilingan." },
+          { id: 18, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Dalilni mustahkamlash usullari qaysilar?", options: ["Misol, taqqoslash va mantiqiy xulosa", "Faqat takrorlash", "Faqat undov belgisi", "Faqat uzun gaplar"], correctText: "Misol, taqqoslash va mantiqiy xulosa", explanation: "2-xatboshida dalilni mustahkamlash vositalari sanab o‘tilgan." },
+          { id: 19, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Zamonaviy kommunikatsiyada nimaning uyg‘unligi muhim?", options: ["Qisqalik va mazmun salmog‘ining", "Uzoq gaplar va ko‘p takrorning", "Faqat rasmlarning", "Faqat qisqartmalarning"], correctText: "Qisqalik va mazmun salmog‘ining", explanation: "3-xatboshida qisqalik va mazmun uyg‘unligi ta’kidlangan." },
+          { id: 20, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Aniq tanlangan leksika qanday vazifa bajaradi?", options: ["Matnning ta’sir kuchini oshiradi", "Fikrni chalkashtiradi", "Hajmni kamaytiradi", "Terminlarni yo‘qotadi"], correctText: "Matnning ta’sir kuchini oshiradi", explanation: "So‘nggi gapda aniq leksikaning roli aytilgan." }
+        ],
+        passageQ21_25: [
+          { id: 21, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Parchadagi daryo va qirg‘oq qanday ramziy ma’no tashiydi?", options: ["O‘zgarish va barqarorlik uyg‘unligini", "Tabiat ofatini", "Sayohat qiyinchiligini", "Fasllar almashinuvini"], correctText: "O‘zgarish va barqarorlik uyg‘unligini", explanation: "2-xatboshida o‘zgarish va barqarorlik uyg‘unligi bevosita aytilgan." },
+          { id: 22, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Yo‘lovchi ko‘prikdan o‘tgach qanday holatga keldi?", options: ["Ikkilanish o‘rnini aniq maqsad egalladi", "Yo‘ldan adashdi", "Charchab to‘xtadi", "Ortga qaytdi"], correctText: "Ikkilanish o‘rnini aniq maqsad egalladi", explanation: "3-xatboshida ichki qat’iyat shakllangani ko‘rsatilgan." },
+          { id: 23, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Parcha qaysi fasl manzarasi bilan boshlanadi?", options: ["Bahor seli davri bilan", "Qishki qor bilan", "Yozgi jazirama bilan", "Kuzgi xazon bilan"], correctText: "Bahor seli davri bilan", explanation: "1-xatboshida bahor selidan keyingi holat tasvirlangan." },
+          { id: 24, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Matn qanday asar turiga mansub?", options: ["Badiiy nasriy parcha", "Ilmiy maqola", "Rasmiy bayonnoma", "Tarixiy xronika"], correctText: "Badiiy nasriy parcha", explanation: "Obrazli tasvir va ruhiy kechinma badiiy nasrga xos." },
+          { id: 25, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "«Yog‘och ko‘prik» timsoli nimani bog‘laydi?", options: ["Xotira va yangi manzilni", "Faqat ikki qirg‘oqni", "Faqat suvni", "Faqat daraxtlarni"], correctText: "Xotira va yangi manzilni", explanation: "O‘tmish xotirasi va kelajak maqsad o‘rtasidagi ko‘prik." }
+        ],
+        ghazalQ26_28: [
+          { id: 26, points: 1.2, typeLabel: "G‘azal tahlili • 26–28", question: "1-baytdagi «ashk» so‘zining ma’nosi nima?", options: ["Ko‘z yoshi", "Muhabbat", "Quyosh", "Sham"], correctText: "Ko‘z yoshi", explanation: "Mumtoz adabiyotda «ashk» — ko‘z yoshi." },
+          { id: 27, points: 1.2, typeLabel: "G‘azal tahlili • 26–28", question: "3-baytda shoir qaysi badiiy an’anani qo‘llagan?", options: ["Maqta’da o‘z taxallusini keltirib, she’r ta’sirini ifodalash", "Radifni olib tashlash", "Qofiyasiz yozish", "Nasriy bayon"], correctText: "Maqta’da o‘z taxallusini keltirib, she’r ta’sirini ifodalash", explanation: "«Ey Navoiy» murojaati bilan bayt yakunlangan." },
+          { id: 28, points: 1.2, typeLabel: "G‘azal tahlili • 26–28", question: "2-baytda lirik qahramon nimadan shikoyat qilmaydi?", options: ["Visoldan judo qilsa, falakni ayblamaslikka intiladi", "Ishqdan voz kechadi", "She’rdan kechadi", "Hayotdan norozi bo‘ladi"], correctText: "Visoldan judo qilsa, falakni ayblamaslikka intiladi", explanation: "«Gar visolingdin judo qilsa falak, ayb etmagil»." }
+        ],
+        litIndependentQ29_32: [
+          { id: 29, points: 1.2, typeLabel: "Adabiyot tarixi", question: "«Mehrobdan chayon» romanining muallifi kim?", options: ["Abdulla Qodiriy", "Cho‘lpon", "Oybek", "G‘afur G‘ulom"], correctText: "Abdulla Qodiriy", explanation: "«Mehrobdan chayon» — Abdulla Qodiriy romani." },
+          { id: 30, points: 1.2, typeLabel: "Badiiy san’at", question: "Bir so‘zning ikki xil ma’nosiga asoslangan so‘z o‘yini qanday san’at?", options: ["Tuyuq / tajnis", "Mubolag‘a", "Tashxis", "Nido"], correctText: "Tuyuq / tajnis", explanation: "Shakldosh/ohangdosh so‘zlar o‘yini tajnis/tuyuqqa xos." },
+          { id: 31, points: 1.2, typeLabel: "Adabiyot nazariyasi", question: "Asardagi voqealar rivojining eng yuqori nuqtasi nima deyiladi?", options: ["Kulminatsiya", "Ekspozitsiya", "Epilog", "Tugun"], correctText: "Kulminatsiya", explanation: "Ziddiyatning eng keskin nuqtasi — kulminatsiya." },
+          { id: 32, points: 1.2, typeLabel: "O‘zbek adabiyoti", question: "«O‘tkan kunlar»da Kumush qaysi shahar qizi?", options: ["Marg‘ilon", "Toshkent", "Samarqand", "Xiva"], correctText: "Marg‘ilon", explanation: "Kumush — Marg‘ilonlik." }
+        ],
+        matchingQ33_35: [
+          { id: 33, points: 1.2, typeLabel: "Moslashtirish (33–35)", question: "33-moslashtirish: Janrlar va namunalarni moslang: (1) Roman, (2) Doston, (3) G‘azal.", options: ["1-«O‘tkan kunlar», 2-«Farhod va Shirin», 3-Mumtoz lirik she’r", "1-G‘azal, 2-Roman, 3-Doston", "1-Doston, 2-G‘azal, 3-Roman", "1-Maqola, 2-Drama, 3-Felyeton"], correctText: "1-«O‘tkan kunlar», 2-«Farhod va Shirin», 3-Mumtoz lirik she’r", explanation: "Janr va namuna to‘g‘ri moslashtirilgan." },
+          { id: 34, points: 1.2, typeLabel: "Moslashtirish (33–35)", question: "34-moslashtirish: Shoirlar va asarlarini moslang: (1) Alisher Navoiy, (2) Zulfiya, (3) Abdulla Oripov.", options: ["1-«Xamsa», 2-«Hijron kunlarida», 3-«Sohibqiron»", "1-«Sohibqiron», 2-«Xamsa», 3-«Hijron kunlarida»", "1-«Hijron kunlarida», 2-«Sohibqiron», 3-«Xamsa»", "1-«Ufq», 2-«Kecha va kunduz», 3-«Qutlug‘ qon»"], correctText: "1-«Xamsa», 2-«Hijron kunlarida», 3-«Sohibqiron»", explanation: "Shoirlar va asarlar to‘g‘ri moslangan." },
+          { id: 35, points: 1.2, typeLabel: "Moslashtirish (33–35)", question: "35-moslashtirish: Lirik tur unsurlarini moslang: (1) Bayt, (2) Misra, (3) Qofiya.", options: ["1-ikki misradan iborat she’riy birlik, 2-bir qator she’r, 3-misra oxiridagi ohangdoshlik", "1-nasriy xatboshi, 2-sahna ko‘rinishi, 3-muallif gapi", "1-drama, 2-komediya, 3-tragediya", "1-syujet, 2-motiv, 3-xronotop"], correctText: "1-ikki misradan iborat she’riy birlik, 2-bir qator she’r, 3-misra oxiridagi ohangdoshlik", explanation: "She’riy tuzilish unsurlari to‘g‘ri izohlangan." }
+        ],
+        openQ36_44: [
+          { id: 36, points: 1.2, typeLabel: "Sintaksis", question: "Gapning ikki bosh bo‘lagidan biri bo‘lib, eganing belgisini bildiruvchi bo‘lak nomini yozing.", accepted: ["kesim"], displayAnswer: "Kesim", explanation: "Bosh bo‘laklardan biri — kesim." },
+          { id: 37, points: 1.2, typeLabel: "Badiiy san’at", question: "Bir narsani ikkinchisiga o‘xshatishga asoslangan badiiy san’at nomini yozing.", accepted: ["tashbeh", "oxshatish", "o‘xshatish"], displayAnswer: "Tashbeh (o‘xshatish)", explanation: "Tashbeh — o‘xshatish san’ati." },
+          { id: 38, points: 1.2, typeLabel: "Frazeologiya", question: "«Sir saqlamoq, boshqalarga aytmaslik» ma’nosidagi iborani yozing (masalan: og‘ziga talqon solmoq).", accepted: ["ogziga talqon solmoq", "og‘ziga talqon solmoq", "sir boy bermaslik"], displayAnswer: "Og‘ziga talqon solmoq", explanation: "Sir saqlash ma’nosidagi frazeologik birlik." },
+          { id: 39, points: 1.2, typeLabel: "Morfologiya", question: "«Kitobim» so‘zidagi «-im» qanday qo‘shimcha?", accepted: ["egalik", "egalik qoshimchasi", "egalik qo‘shimchasi"], displayAnswer: "Egalik qo‘shimchasi (1-shaxs birlik)", explanation: "«-im» — 1-shaxs birlik egalik qo‘shimchasi." },
+          { id: 40, points: 1.2, typeLabel: "Mumtoz adabiyot", question: "G‘azalning birinchi bayti adabiyotshunoslikda qanday ataladi?", accepted: ["matla", "matla’"], displayAnswer: "Matla’", explanation: "G‘azalning boshlanish bayti — matla’." },
+          { id: 41, points: 1.2, typeLabel: "Leksikologiya", question: "Ma’nolari bir-biriga qarama-qarshi bo‘lgan so‘zlar (masalan: tun — kun) nima deyiladi?", accepted: ["antonim", "antonimlar"], displayAnswer: "Antonimlar", explanation: "Qarama-qarshi ma’noli so‘zlar — antonimlar." },
+          { id: 42, points: 1.2, typeLabel: "Sintaksis", question: "Boshqa gapga tobe bo‘lib kelgan sodda gap qanday gap deyiladi?", accepted: ["ergash gap"], displayAnswer: "Ergash gap", explanation: "Ergashgan qo‘shma gap tarkibidagi tobe gap." },
+          { id: 43, points: 1.2, typeLabel: "Adabiyot", question: "«Qutlug‘ qon» romanining muallifi kim?", accepted: ["oybek", "muso toshmuhammad oybek"], displayAnswer: "Oybek", explanation: "«Qutlug‘ qon» — Oybek romani." },
+          { id: 44, points: 1.2, typeLabel: "Punktuatsiya", question: "Gap oxirida kuchli his-hayajonni ifodalash uchun qaysi tinish belgisi qo‘yiladi?", accepted: ["undov", "undov belgisi", "!"], displayAnswer: "Undov belgisi (!)", explanation: "His-hayajonni bildirish uchun undov belgisi (!) ishlatiladi." }
+        ],
+        essayPrompts: [
+          { id: "v2-p1", title: "1-mavzu: Nutq madaniyati va mantiqiy fikrlash", text: "Jamiyatda mantiqli va ravshan nutq madaniyatini rivojlantirishning ahamiyati haqida dalillangan esse yozing." },
+          { id: 2, title: "2-mavzu: O‘zgarishlar va barqarorlik", text: "Tezkor o‘zgarishlar davrida insonning ichki barqarorligi va qadriyatlarga sodiqligi haqida fikr yuriting." },
+          { id: "v2-p3", title: "3-mavzu: Mustaqil mutolaa va tafakkur", text: "Mustaqil o‘qish odati o‘quvchida tanqidiy tafakkurni qanday shakllantiradi? Dalillar bilan asoslang." }
+        ]
+      },
+
+      // ---------------- VARIANT 3 ----------------
+      {
+        id: 3,
+        label: "Variant 3",
+        scientificPassage: {
+          title: "Ilmiy-ommabop matn: Tilshunoslikda matn yaxlitligi va kontekst",
+          source: "Matn lingvistikasi materiallari asosida",
+          paragraphs: [
+            "Matn alohida olingan tasodifiy gaplar yig‘indisi emas, balki mazmuniy va grammatik jihatdan o‘zaro bog‘langan yaxlit nutqiy birlikdir. Undagi har bir keyingi gap oldingi fikrni rivojlantiradi, aniqlashtiradi yoki unga qarama-qarshi nuqtayi nazarni ilgari suradi.",
+            "Kontekst so‘z va gapning aniq ma’nosini belgilashda hal qiluvchi rol o‘ynaydi. Ayrim so‘zlar alohida holatda bir necha ma’noga ega bo‘lsa-da, muayyan matn muhitida faqat bitta aniq ma’noda voqelanadi.",
+            "Shu bois savol-topshiriqlarga to‘g‘ri javob berishda matnni yuzaki ko‘zdan kechirish emas, balki tayanch so‘zlar, bog‘lovchilar va muallif xulosasini solishtirib o‘qish talab etiladi."
+          ]
+        },
+        literaryPassage: {
+          title: "Badiiy matn parchasi: «Tog‘dagi buloq»",
+          source: "Badiiy nasriy namuna",
+          paragraphs: [
+            "Qoyalar orasidan sizib chiqqan zilol buloq suvi toshdan-toshga urilib, kumushdek jiringlardi. Cho‘pon yigit qo‘lini suvga botirib, muzdek salqinlikdan nafas oldi.",
+            "Buloqning yonida o‘sgan yalpiz ifori atrofga taralgan edi. Yigit shoshilmasdan o‘tirdi: uzoq yo‘l oldida bir lahza tin olish ham kuch bag‘ishlashini yaxshi bilardi.",
+            "U o‘rnidan turgach, qadamlari yengillashgan, nigohi esa yanada ravshanlashgan edi."
+          ]
+        },
+        ghazal: {
+          title: "Alisher Navoiy g‘azalidan baytlar (3-variant)",
+          lines: [
+            "1. Bahor ayyomi bo‘ldi-yu, mening ko‘nglum g‘aminkim,",
+            "    Guliston ichra ul sarvi ravonimdin judo qoldim.",
+            "2. Nechakim bulbul aylar nolalar gulshanda, lekin men",
+            "    Qafas ichra fig‘on aylab, o‘zumga mubtalo qoldim.",
+            "3. Visoling davlatidin gar muyassar bo‘lsa bir kun,",
+            "    Navoiydek g‘aribning xoksorin ham rizo qilg‘il."
+          ]
+        },
+        independentQ1_15: [
+          { id: 1, points: 1.1, typeLabel: "Imlo me’yori", question: "Qaysi so‘zda tutuq belgisi (’) to‘g‘ri qo‘llangan?", options: ["ma’no, e’lon, ta’sir", "mano, elon, tasir", "ma’n’o, e’l’on, ta’s’ir", "ma’no, e’lon, ta’sir’"], correctText: "ma’no, e’lon, ta’sir", explanation: "Arab tilidan kirgan unlidan keyingi tutuq belgisi to‘g‘ri qo‘llangan." },
+          { id: 2, points: 1.1, typeLabel: "Paronimlar", question: "«Olim yangi ... kashf etdi» gapida mos so‘zni tanlang.", options: ["qonuniyat", "qonuniy", "qonunlashtirish", "qonunan"], correctText: "qonuniyat", explanation: "«Qonuniyat kashf etdi» — ilmiy uslubga mos birikma." },
+          { id: 3, points: 1.1, typeLabel: "Ravish", question: "Qaysi gapda holat ravishi qatnashgan?", options: ["U vazifani tez va puxta bajardi.", "Bugun havo iliq.", "Uchta kitob oldim.", "Men senga aytdim."], correctText: "U vazifani tez va puxta bajardi.", explanation: "«Tez va puxta» — harakatning bajarilish holatini bildiruvchi ravishlar." },
+          { id: 4, points: 1.1, typeLabel: "Qo‘shma so‘zlar", question: "Qaysi qo‘shma so‘z qo‘shib yoziladi?", options: ["xushxabar", "xush xabar", "xush-xabar", "xush xabarlar"], correctText: "xushxabar", explanation: "«Xushxabar» qo‘shma oti qo‘shib yoziladi." },
+          { id: 5, points: 1.1, typeLabel: "Fonetika", question: "Jarangsiz jufti mavjud bo‘lgan jarangli undosh qaysi?", options: ["b (jufti: p)", "m", "n", "l"], correctText: "b (jufti: p)", explanation: "«b» jarangli undoshining jufti «p» jarangsiz undoshidir." },
+          { id: 6, points: 1.1, typeLabel: "Sintaksis", question: "«Kitob o‘qigan kishi adashmaydi» gapida «adashmaydi» qanday bo‘lak?", options: ["Kesim", "Ega", "Hol", "Aniqlovchi"], correctText: "Kesim", explanation: "Gapning kesimi — «adashmaydi»." },
+          { id: 7, points: 1.1, typeLabel: "Tinish belgilari", question: "Uyushiq bo‘laklar orasida vergul qaysi gapda to‘g‘ri qo‘yilgan?", options: ["Daftarga qalam, ruchka, chizg‘ich va o‘chirg‘ich soldim.", "Daftarga qalam ruchka, chizg‘ich va o‘chirg‘ich soldim.", "Daftarga qalam, ruchka chizg‘ich, va o‘chirg‘ich soldim.", "Daftarga, qalam ruchka chizg‘ich va o‘chirg‘ich soldim."], correctText: "Daftarga qalam, ruchka, chizg‘ich va o‘chirg‘ich soldim.", explanation: "Uyushiq bo‘laklar vergul bilan ajratilgan." },
+          { id: 8, points: 1.1, typeLabel: "Leksikologiya", question: "Ma’nodosh (sinonim) so‘zlar qatorini toping.", options: ["chiroyli, go‘zal, ko‘rkam, latofatli", "baland, past, uzun, kalta", "oq, qora, ko‘k, yashil", "kecha, bugun, ertaga, indin"], correctText: "chiroyli, go‘zal, ko‘rkam, latofatli", explanation: "Bir umumiy ma’no atrofida birlashgan sinonimlar." },
+          { id: 9, points: 1.1, typeLabel: "Bog‘lovchi", question: "Zidlov bog‘lovchisi qaysi?", options: ["lekin, biroq, ammo", "va, ham, hamda", "yoki, yo, goh", "chunki, shuning uchun"], correctText: "lekin, biroq, ammo", explanation: "«Lekin, biroq, ammo» — zidlov bog‘lovchilari." },
+          { id: 10, points: 1.1, typeLabel: "Bog‘lovchisiz gap", question: "Bog‘lovchisiz qo‘shma gap qaysi?", options: ["Tong otdi, quyosh ufqdan ko‘tarildi.", "Tong otdi va quyosh ko‘tarildi.", "Agar tong otsa, yo‘lga chiqamiz.", "U keldi, chunki chaqirgan edik."], correctText: "Tong otdi, quyosh ufqdan ko‘tarildi.", explanation: "Bog‘lovchisiz, intonatsiya va vergul bilan bog‘langan." },
+          { id: 11, points: 1.1, typeLabel: "Uslubiyat", question: "Publitsistik uslubning asosiy maqsadi nima?", options: ["Jamoatchilik fikrini shakllantirish va xabardor qilish", "Faqat qonuniy hujjat yozish", "Faqat badiiy obraz yaratish", "Faqat ilmiy formula berish"], correctText: "Jamoatchilik fikrini shakllantirish va xabardor qilish", explanation: "Publitsistik uslub ommaviy axborot va jamoatchilikka qaratilgan." },
+          { id: 12, points: 1.1, typeLabel: "Frazeologiya", question: "«Boshi osmonda» iborasi nimani bildiradi?", options: ["Juda xursand, baxtiyor", "Boshi og‘riyapti", "Baland joyda turibdi", "Xafa bo‘ldi"], correctText: "Juda xursand, baxtiyor", explanation: "Haddan tashqari quvonch holatini bildiradi." },
+          { id: 13, points: 1.1, typeLabel: "Shaxs-son", question: "«Biz ertaga yig‘ilamiz» gapida kesim qaysi shaxs-sonda?", options: ["1-shaxs ko‘plik", "2-shaxs birlik", "3-shaxs ko‘plik", "1-shaxs birlik"], correctText: "1-shaxs ko‘plik", explanation: "«Biz ... yig‘ilamiz» — 1-shaxs ko‘plik." },
+          { id: 14, points: 1.1, typeLabel: "Tire va defis", question: "Qaysi gapda chiziqcha to‘g‘ri qo‘llangan?", options: ["1991-yil 31-avgust.", "1991—yil 31—avgust.", "1991yil 31avgust.", "1991-yil, 31-avgust."], correctText: "1991-yil 31-avgust.", explanation: "Sana va qo‘shimcha/so‘z oralig‘ida chiziqcha qo‘yiladi." },
+          { id: 15, points: 1.1, typeLabel: "Gap bo‘laklari", question: "«O‘quvchi diqqat bilan tingladi» gapida «diqqat bilan» qanday bo‘lak?", options: ["Ravish holi", "Ega", "To‘ldiruvchi", "Aniqlovchi"], correctText: "Ravish holi", explanation: "«Qanday tingladi?» so‘rog‘iga javob bo‘lgan ravish holi." }
+        ],
+        passageQ16_20: [
+          { id: 16, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Matnga ko‘ra matn nimadan iborat?", options: ["Mazmuniy va grammatik jihatdan bog‘langan yaxlit nutqiy birlikdan", "Tasodifiy gaplar to‘plamidan", "Faqat bitta gapdan", "Faqat sarlavhadan"], correctText: "Mazmuniy va grammatik jihatdan bog‘langan yaxlit nutqiy birlikdan", explanation: "1-xatboshida matnning yaxlitligi ta’riflangan." },
+          { id: 17, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Kontekst qanday vazifani bajaradi?", options: ["So‘z va gapning aniq ma’nosini belgilashga yordam beradi", "So‘z ma’nosini yo‘qotadi", "Faqat imloni tekshiradi", "Faqat hajmni oshiradi"], correctText: "So‘z va gapning aniq ma’nosini belgilashga yordam beradi", explanation: "2-xatboshida kontekstning ma’no aniqlashtiruvchi roli ko‘rsatilgan." },
+          { id: 18, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Matnni o‘qishda qanday yondashuv tavsiya etilgan?", options: ["Tayanch so‘zlar, bog‘lovchilar va xulosani solishtirib o‘qish", "Faqat birinchi so‘zni o‘qish", "Faqat oxirgi gapni o‘qish", "O‘qimasdan taxmin qilish"], correctText: "Tayanch so‘zlar, bog‘lovchilar va xulosani solishtirib o‘qish", explanation: "3-xatboshida matnni tahliliy o‘qish usuli ko‘rsatilgan." },
+          { id: 19, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Keyingi gap oldingi fikrga nisbatan qanday munosabatda bo‘lishi mumkin?", options: ["Rivojlantiradi, aniqlashtiradi yoki qarshi fikr bildiradi", "Hech qanday aloqasi bo‘lmaydi", "Har doim inkor etadi", "Faqat ko‘chiriladi"], correctText: "Rivojlantiradi, aniqlashtiradi yoki qarshi fikr bildiradi", explanation: "1-xatboshida gaplararo mantiqiy aloqa turlari keltirilgan." },
+          { id: 20, points: 1.2, typeLabel: "Ilmiy matn • 16–20", question: "Matn qaysi sohaga oid?", options: ["Matn lingvistikasi / o‘qib tushunish metodikasi", "Astronomiya", "Botanika", "Geometriya"], correctText: "Matn lingvistikasi / o‘qib tushunish metodikasi", explanation: "Matn, kontekst va o‘qib tushunish haqidagi maqola." }
+        ],
+        passageQ21_25: [
+          { id: 21, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Parchadagi buloq suvi qanday tasvirlangan?", options: ["Zilol, toshdan-toshga urilib kumushdek jiringlovchi", "Loyqa va turg‘un", "Qattiq muzlagan", "Quruq o‘zan"], correctText: "Zilol, toshdan-toshga urilib kumushdek jiringlovchi", explanation: "1-xatboshida buloqning badiiy tasviri berilgan." },
+          { id: 22, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Cho‘pon yigitning qisqa to‘xtashi nimaga xizmat qildi?", options: ["Kuch to‘plash va nigohining ravshanlashuviga", "Yo‘ldan qolishiga", "Uxlab qolishiga", "Xafa bo‘lishiga"], correctText: "Kuch to‘plash va nigohining ravshanlashuviga", explanation: "2–3-xatboshilarda hordiq va ruhiy tetiklik tasvirlangan." },
+          { id: 23, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Atrofga qanday ifor taralgan edi?", options: ["Yalpiz ifori", "Atirgul ifori", "Rayhon ifori", "Archazor hidi"], correctText: "Yalpiz ifori", explanation: "2-xatboshida yalpiz ifori tilga olingan." },
+          { id: 24, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Qahramonning yo‘lga chiqish holati qanday?", options: ["Qadamlari yengillashgan va tetik", "Tushkun va holdan toygan", "Shoshilinch va sarosimada", "G‘azablangan"], correctText: "Qadamlari yengillashgan va tetik", explanation: "So‘nggi gapda qadamlari yengillashgani aytilgan." },
+          { id: 25, points: 1.2, typeLabel: "Badiiy matn • 21–25", question: "Matndagi asosiy kayfiyat qanday?", options: ["Tabiat bilan hamohang osoyishtalik", "Vahima va xavotir", "Keskin bahs", "Kinoya"], correctText: "Tabiat bilan hamohang osoyishtalik", explanation: "Tog‘ bulog‘i va salqin havo osoyishta kayfiyat yaratadi." }
+        ],
+        ghazalQ26_28: [
+          { id: 26, points: 1.2, typeLabel: "G‘azal tahlili • 26–28", question: "1-baytda bahor fasli qanday holatda ko‘rsatilgan?", options: ["Bahor kelgan, ammo lirik qahramon yoridan judo bo‘lib g‘amgin", "Bahor kelmagan", "Bahorda hamma xursand", "Qish qaytgan"], correctText: "Bahor kelgan, ammo lirik qahramon yoridan judo bo‘lib g‘amgin", explanation: "Bahor fasli va hijron g‘ami o‘rtasidagi kontrast." },
+          { id: 27, points: 1.2, typeLabel: "G‘azal tahlili • 26–28", question: "2-baytda bulbul va qafas tasviri nimani anglatadi?", options: ["Erkin gulshandagi bulbulga nisbatan qafas ichidagi oshiq holati", "Qushlarni ovlash", "Bog‘bon mehnati", "Tabiat hodisasi"], correctText: "Erkin gulshandagi bulbulga nisbatan qafas ichidagi oshiq holati", explanation: "Qafas ichidagi fig‘on — hijron va cheklov ramzi." },
+          { id: 28, points: 1.2, typeLabel: "G‘azal tahlili • 26–28", question: "3-baytda oshiq nimani so‘ramoqda?", options: ["Visol davlatidan bir kun muyassar bo‘lsa, xoksorini rizo etishni", "Boylik va mansabni", "Unutishni", "Safar qilishni"], correctText: "Visol davlatidan bir kun muyassar bo‘lsa, xoksorini rizo etishni", explanation: "3-baytda visol umidi va iltijo ifodalangan." }
+        ],
+        litIndependentQ29_32: [
+          { id: 29, points: 1.2, typeLabel: "Adabiyot tarixi", question: "«Ruhlar isyoni» dostoni muallifi kim?", options: ["Erkin Vohidov", "Abdulla Oripov", "Hamid Olimjon", "Usmon Nosir"], correctText: "Erkin Vohidov", explanation: "«Ruhlar isyoni» — Erkin Vohidov dostoni." },
+          { id: 30, points: 1.2, typeLabel: "Badiiy san’at", question: "Biror narsa yoki hodisani haddan ortiq bo‘rttirib tasvirlash san’ati nima?", options: ["Mubolag‘a", "Kinoya", "Tashxis", "Talmeh"], correctText: "Mubolag‘a", explanation: "Bo‘rttirib tasvirlash — mubolag‘a san’ati." },
+          { id: 31, points: 1.2, typeLabel: "Adabiyot nazariyasi", question: "Asar voqealarining yakuniy qismi adabiyotshunoslikda qanday ataladi?", options: ["Yechim / epilog", "Ekspozitsiya", "Tugun", "Kulminatsiya"], correctText: "Yechim / epilog", explanation: "Voqealar rivojining yakuni — yechim." },
+          { id: 32, points: 1.2, typeLabel: "O‘zbek adabiyoti", question: "«Ufq» trilogiyasi muallifi kim?", options: ["Said Ahmad", "Oybek", "O‘tkir Hoshimov", "Tog‘ay Murod"], correctText: "Said Ahmad", explanation: "«Ufq» trilogiyasi — Said Ahmad asari." }
+        ],
+        matchingQ33_35: [
+          { id: 33, points: 1.2, typeLabel: "Moslashtirish (33–35)", question: "33-moslashtirish: Adabiy turlar va janrlarni moslang: (1) Epik tur, (2) Lirik tur, (3) Dramatik tur.", options: ["1-Roman va doston, 2-G‘azal va lirik she’r, 3-Drama va komediya", "1-G‘azal, 2-Roman, 3-Maqola", "1-Drama, 2-Essе, 3-Lirik she’r", "1-Maqola, 2-Felyeton, 3-Pamflet"], correctText: "1-Roman va doston, 2-G‘azal va lirik she’r, 3-Drama va komediya", explanation: "Adabiy turlar va ularga kiruvchi janrlar to‘g‘ri moslashtirilgan." },
+          { id: 34, points: 1.2, typeLabel: "Moslashtirish (33–35)", question: "34-moslashtirish: Badiiy san’atlar va mohiyatini moslang: (1) Tashbeh, (2) Tashxis, (3) Mubolag‘a.", options: ["1-O‘xshatish, 2-Jonlantirish, 3-Bo‘rttirib tasvirlash", "1-Qofiya, 2-Radif, 3-Vazn", "1-Ega, 2-Kesim, 3-Hol", "1-Ot, 2-Sifat, 3-Ravish"], correctText: "1-O‘xshatish, 2-Jonlantirish, 3-Bo‘rttirib tasvirlash", explanation: "Badiiy san’atlarning mohiyati aniq ko‘rsatilgan." },
+          { id: 35, points: 1.2, typeLabel: "Moslashtirish (33–35)", question: "35-moslashtirish: Asar va qahramonni moslang: (1) «O‘tkan kunlar», (2) «Kecha va kunduz», (3) «Farhod va Shirin».", options: ["1-Otabek, 2-Miryoqub, 3-Farhod", "1-Farhod, 2-Otabek, 3-Miryoqub", "1-Miryoqub, 2-Farhod, 3-Otabek", "1-Bahrom, 2-Majnun, 3-Otabek"], correctText: "1-Otabek, 2-Miryoqub, 3-Farhod", explanation: "Asarlar va ularning obrazlari to‘g‘ri moslangan." }
+        ],
+        openQ36_44: [
+          { id: 36, points: 1.2, typeLabel: "Sintaksis", question: "Gapning ikkinchi darajali bo‘lagi bo‘lib, predmetning belgisini bildiruvchi bo‘lak nomini yozing.", accepted: ["aniqlovchi"], displayAnswer: "Aniqlovchi", explanation: "Predmet belgisini bildiruvchi ikkinchi darajali bo‘lak — aniqlovchi." },
+          { id: 37, points: 1.2, typeLabel: "Badiiy san’at", question: "Tarixiy voqea yoki shaxsga ishora qilish san’ati nima deyiladi?", accepted: ["talmeh"], displayAnswer: "Talmeh", explanation: "Tarixiy/afsonaviy ishora — talmeh san’ati." },
+          { id: 38, points: 1.2, typeLabel: "Frazeologiya", question: "«Diqqat bilan tinglamoq» ma’nosidagi iborani yozing (masalan: quloq solmoq).", accepted: ["quloq solmoq", "qulogini tutmoq", "qulog‘ini tutmoq"], displayAnswer: "Quloq solmoq", explanation: "Diqqat bilan eshitish ma’nosidagi ibora." },
+          { id: 39, points: 1.2, typeLabel: "Morfologiya", question: "«Maktabdan» so‘zidagi «-dan» qanday kelishik qo‘shimchasi?", accepted: ["chiqish", "chiqish kelishigi"], displayAnswer: "Chiqish kelishigi", explanation: "«-dan» — chiqish kelishigi qo‘shimchasi." },
+          { id: 40, points: 1.2, typeLabel: "Mumtoz adabiyot", question: "G‘azal baytlarining ikkinchi qatori nima deyiladi?", accepted: ["misra", "ikkinchi misra"], displayAnswer: "Misra", explanation: "She’riy satr — misra." },
+          { id: 41, points: 1.2, typeLabel: "Leksikologiya", question: "Ma’nolari yaqin so‘zlar tilshunoslikda qanday ataladi?", accepted: ["sinonim", "sinonimlar", "manodosh", "ma’nodoshlar"], displayAnswer: "Sinonimlar (ma’nodosh so‘zlar)", explanation: "Ma’nodosh so‘zlar — sinonimlar." },
+          { id: 42, points: 1.2, typeLabel: "Sintaksis", question: "Ega ham, kesim ham ishtirok etgan gap qanday gap?", accepted: ["ikki bosh bolakli gap", "ikki bosh bo‘lakli gap"], displayAnswer: "Ikki bosh bo‘lakli gap", explanation: "Ega va kesimi mavjud gap." },
+          { id: 43, points: 1.2, typeLabel: "Adabiyot", question: "«Alpomish» qaysi adabiy janrga mansub?", accepted: ["doston", "xalq dostoni", "qahramonlik dostoni"], displayAnswer: "Doston (xalq qahramonlik dostoni)", explanation: "«Alpomish» — xalq qahramonlik dostoni." },
+          { id: 44, points: 1.2, typeLabel: "Punktuatsiya", question: "Gap oxirida oddiy darak fikrni bildirish uchun qaysi belgi qo‘yiladi?", accepted: ["nuqta", "."], displayAnswer: "Nuqta (.)", explanation: "Darak gap oxirida nuqta (.) qo‘yiladi." }
+        ],
+        essayPrompts: [
+          { id: "v3-p1", title: "1-mavzu: Kontekst va chuqur anglash", text: "Axborotni shunchaki yodlash o‘rniga uning mohiyati va kontekstini anglash nima uchun muhim? Dalillar bilan asoslang." },
+          { id: 2, title: "2-mavzu: Sabr va maqsadga intilish", text: "Katta maqsadlarga erishishda sabr, izchillik va o‘z-o‘zini nazorat qilishning o‘rni haqida esse yozing." },
+          { id: "v3-p3", title: "3-mavzu: Ona tiliga e’tibor va savodxonlik", text: "Ona tilining sofligi va yozma savodxonlikni saqlashda har bir shaxsning mas’uliyati qanday? Pozitsiyangizni bayon eting." }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // 2. DYNAMIC RANDOMIZER (VARIANT + QUESTION ORDER + MCQ OPTIONS SHUFFLE)
+    // =========================================================================
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function buildRandomizedExamSet(excludeVariantId = null) {
+      const pool = EXAM_VARIANTS.filter((v) => v.id !== excludeVariantId);
+      const sourcePool = pool.length > 0 ? pool : EXAM_VARIANTS;
+      const chosenVariant = sourcePool[Math.floor(Math.random() * sourcePool.length)];
+
+      // Shuffle independent Q1-Q15 and Q29-Q32, while keeping passage/ghazal/matching coherence
+      const shuffled1_15 = shuffleArray(chosenVariant.independentQ1_15);
+      const shuffled29_32 = shuffleArray(chosenVariant.litIndependentQ29_32);
+
+      const combinedMcqSource = [
+        ...shuffled1_15.map((q) => ({ ...q, section: 1, sectionName: "1-bo‘lim • Grammatika va tilshunoslik" })),
+        ...chosenVariant.passageQ16_20.map((q) => ({ ...q, section: 2, sectionName: "2-bo‘lim • O‘qib tushunish (Matn tahlili)", passageRef: chosenVariant.scientificPassage })),
+        ...chosenVariant.passageQ21_25.map((q) => ({ ...q, section: 2, sectionName: "2-bo‘lim • O‘qib tushunish (Matn tahlili)", passageRef: chosenVariant.literaryPassage })),
+        ...chosenVariant.ghazalQ26_28.map((q) => ({ ...q, section: 3, sectionName: "3-bo‘lim • Badiiy adabiyot va g‘azal tahlili", ghazalRef: chosenVariant.ghazal })),
+        ...shuffled29_32.map((q) => ({ ...q, section: 3, sectionName: "3-bo‘lim • Badiiy adabiyot va g‘azal tahlili" })),
+        ...chosenVariant.matchingQ33_35.map((q) => ({ ...q, section: 3, sectionName: "3-bo‘lim • Badiiy adabiyot va g‘azal tahlili" }))
+      ];
+
+      const letters = ["A", "B", "C", "D"];
+      const tasks = [];
+
+      combinedMcqSource.forEach((rawQ, idx) => {
+        const displayNum = idx + 1; // 1..35
+        const shuffledTexts = shuffleArray(rawQ.options);
+        const mappedOptions = shuffledTexts.map((txt, optIdx) => ({
+          letter: letters[optIdx],
+          text: txt
+        }));
+        const correctOpt = mappedOptions.find((o) => o.text === rawQ.correctText);
+
+        tasks.push({
+          id: displayNum,
+          section: rawQ.section,
+          sectionName: rawQ.sectionName,
+          type: "mcq",
+          typeLabel: rawQ.typeLabel,
+          points: rawQ.points,
+          passageRef: rawQ.passageRef || null,
+          ghazalRef: rawQ.ghazalRef || null,
+          question: rawQ.question,
+          options: mappedOptions,
+          correctLetter: correctOpt ? correctOpt.letter : "A",
+          displayAnswer: correctOpt ? `${correctOpt.letter}) ${rawQ.correctText}` : rawQ.correctText,
+          explanation: rawQ.explanation
+        });
+      });
+
+      // Q36-Q44: Open short-answer tasks (also shuffled for variety)
+      const shuffledOpen = shuffleArray(chosenVariant.openQ36_44);
+      shuffledOpen.forEach((oq, idx) => {
+        tasks.push({
+          id: 36 + idx,
+          section: 4,
+          sectionName: "4-bo‘lim • Ochiq test topshiriqlari",
+          type: "open",
+          typeLabel: `${oq.typeLabel} • ${36 + idx}`,
+          points: oq.points,
+          question: oq.question,
+          accepted: oq.accepted,
+          displayAnswer: oq.displayAnswer,
+          explanation: oq.explanation
+        });
+      });
+
+      // Q45: Argumentative Essay (24 points)
+      tasks.push({
+        id: 45,
+        section: 5,
+        sectionName: "5-bo‘lim • Yozma ish (Argumentativ Esse)",
+        type: "essay",
+        typeLabel: "45-topshiriq • 24 ball",
+        points: 24.0,
+        prompts: chosenVariant.essayPrompts
+      });
+
+      return {
+        variantId: chosenVariant.id,
+        variantLabel: chosenVariant.label,
+        seedNonce: Date.now() + "-" + Math.random().toString(36).slice(2, 7),
+        tasks
+      };
+    }
+
+    // =========================================================================
+    // 3. APPLICATION STATE & PERSISTENCE
+    // =========================================================================
+    const STORAGE_KEY = "ru_milliy_sertifikat_growmock_v3";
+
+    let appState = {
+      started: false,
+      finished: false,
+      currentIndex: 0,
+      durationSec: 180 * 60,
+      remainingSec: 180 * 60,
+      paused: false,
+      answers: {},
+      flagged: {},
+      essayText: "",
+      selectedPromptId: "",
+      reviewFilter: "all",
+      activeSet: null
+    };
+
+    let timerHandle = null;
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (err) {
+        // Safe fallback if storage is unavailable
+      }
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.activeSet || !Array.isArray(parsed.activeSet.tasks) || parsed.activeSet.tasks.length !== 45) {
+          return false;
+        }
+        appState = Object.assign({}, appState, parsed);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
+
+    function showToast(message) {
+      const banner = document.getElementById("toast-banner");
+      const textEl = document.getElementById("toast-message");
+      textEl.textContent = message;
+      banner.classList.remove("hidden");
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => {
+        banner.classList.add("hidden");
+      }, 2800);
+    }
+
+    // =========================================================================
+    // 4. TIMER & EXAM FLOW
+    // =========================================================================
+    function formatSeconds(sec) {
+      const s = Math.max(0, Math.floor(sec));
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const r = s % 60;
+      return [h, m, r].map((n) => String(n).padStart(2, "0")).join(":");
+    }
+
+    function updateTimerDisplay() {
+      const pill = document.getElementById("timer-pill");
+      const label = document.getElementById("timer-text");
+      if (appState.durationSec === 0) {
+        label.textContent = "Vaqtsiz";
+        pill.classList.remove("warning");
+        return;
+      }
+      label.textContent = formatSeconds(appState.remainingSec);
+      if (appState.remainingSec <= 600) {
+        pill.classList.add("warning");
+      } else {
+        pill.classList.remove("warning");
+      }
+    }
+
+    function startTimerLoop() {
+      clearInterval(timerHandle);
+      if (appState.durationSec === 0 || appState.finished) return;
+      timerHandle = setInterval(() => {
+        if (appState.paused || appState.finished) return;
+        appState.remainingSec -= 1;
+        updateTimerDisplay();
+        if (appState.remainingSec % 5 === 0) saveState();
+        if (appState.remainingSec <= 0) {
+          clearInterval(timerHandle);
+          showToast("Imtihon vaqti tugadi! Javoblar hisoblanmoqda.");
+          submitExam();
+        }
+      }, 1000);
+    }
+
+    function togglePauseTimer() {
+      if (appState.durationSec === 0) {
+        showToast("Vaqtsiz rejimda taymer faol emas.");
+        return;
+      }
+      appState.paused = !appState.paused;
+      document.getElementById("pause-btn-icon").textContent = appState.paused ? "▶" : "❚❚";
+      saveState();
+      showToast(appState.paused ? "Vaqt vaqtincha to‘xtatildi." : "Vaqt davom ettirildi.");
+    }
+
+    function startFreshRandomExam() {
+      const radio = document.querySelector('input[name="exam-duration"]:checked');
+      const mins = radio ? parseInt(radio.value, 10) : (appState.durationSec ? Math.round(appState.durationSec / 60) : 180);
+      const prevVariantId = appState.activeSet ? appState.activeSet.variantId : null;
+      const freshSet = buildRandomizedExamSet(prevVariantId);
+      const essayTask = freshSet.tasks[44];
+
+      appState = {
+        started: true,
+        finished: false,
+        currentIndex: 0,
+        durationSec: mins * 60,
+        remainingSec: mins * 60,
+        paused: false,
+        answers: {},
+        flagged: {},
+        essayText: "",
+        selectedPromptId: essayTask.prompts[0].id,
+        reviewFilter: "all",
+        activeSet: freshSet
+      };
+
+      saveState();
+      showExamScreen();
+      showToast(`${freshSet.variantLabel} tayyorlandi — savollar va variantlar yangilandi!`);
+    }
+
+    function showExamScreen() {
+      document.getElementById("start-screen").classList.add("hidden");
+      document.getElementById("results-screen").classList.add("hidden");
+      document.getElementById("exam-screen").classList.remove("hidden");
+
+      document.getElementById("active-variant-label").textContent = appState.activeSet.variantLabel;
+      document.getElementById("pause-btn-icon").textContent = appState.paused ? "▶" : "❚❚";
+
+      renderQuestionStage();
+      renderPalettes();
+      updateProgress();
+      updateTimerDisplay();
+      startTimerLoop();
+    }
+
+    function goHomeFromExam() {
+      appState.paused = true;
+      saveState();
+      clearInterval(timerHandle);
+      document.getElementById("exam-screen").classList.add("hidden");
+      document.getElementById("results-screen").classList.add("hidden");
+      document.getElementById("start-screen").classList.remove("hidden");
+    }
+
+    function openFinishModal() {
+      const answered = getAnsweredCount();
+      const words = countWords(appState.essayText);
+      document.getElementById("finish-summary-text").innerHTML =
+        `Siz <strong>45 ta</strong> topshiriqdan <strong>${answered} tasiga</strong> javob berdingiz. ` +
+        `45-topshiriq (esse) hajmi: <strong>${words} so‘z</strong>. ` +
+        `Yakunlaganingizdan so‘ng 75 ballik natija va 12 mezonli esse tahlili ko‘rsatiladi.`;
+      document.getElementById("finish-confirm-modal").classList.remove("hidden");
+    }
+
+    function closeFinishModal() {
+      document.getElementById("finish-confirm-modal").classList.add("hidden");
+    }
+
+    function submitExam() {
+      closeFinishModal();
+      clearInterval(timerHandle);
+      appState.finished = true;
+      saveState();
+      showResultsScreen();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // =========================================================================
+    // 5. QUESTION RENDERING & NAVIGATION
+    // =========================================================================
+    function getTasks() {
+      return appState.activeSet ? appState.activeSet.tasks : [];
+    }
+
+    function countWords(str) {
+      const t = (str || "").trim();
+      if (!t) return 0;
+      return t.split(/\s+/).length;
+    }
+
+    function normalizeStr(str) {
+      return (str || "")
+        .toLowerCase()
+        .replace(/[’`ʻʼ']/g, "")
+        .replace(/[.,!?;:"()—–-]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function isAnswered(task) {
+      if (task.type === "essay") {
+        return countWords(appState.essayText) >= 15;
+      }
+      const v = appState.answers[task.id];
+      return typeof v === "string" && v.trim().length > 0;
+    }
+
+    function getAnsweredCount() {
+      return getTasks().filter(isAnswered).length;
+    }
+
+    function updateProgress() {
+      const cnt = getAnsweredCount();
+      const pct = Math.round((cnt / 45) * 100);
+      document.getElementById("answered-count").textContent = cnt;
+      document.getElementById("mobile-ans-badge").textContent = `${cnt}/45`;
+      document.getElementById("progress-bar-fill").style.width = `${pct}%`;
+
+      const words = countWords(appState.essayText);
+      const sbBadge = document.getElementById("sidebar-essay-badge");
+      if (sbBadge) sbBadge.textContent = `${words} so‘z`;
+    }
+
+    function highlightSectionTab(sec) {
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`tab-sec-${i}`);
+        if (!btn) continue;
+        btn.classList.toggle("active", i === sec);
+      }
+    }
+
+    function renderPassageHtml(passage) {
+      return `
+        <div class="passage-card">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid #fde68a;">
+            <strong style="font-size:14px; color:#0f172a;">${escapeHtml(passage.title)}</strong>
+            <span class="badge" style="background:#fef3c7; color:#92400e;">Matn</span>
+          </div>
+          <div class="passage-scroll">
+            ${passage.paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("")}
+          </div>
+          <div style="font-size:11px; color:#78716c; font-style:italic; margin-top:8px;">${escapeHtml(passage.source)}</div>
+        </div>
+      `;
+    }
+
+    function renderGhazalHtml(ghazal) {
+      return `
+        <div class="ghazal-card">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #c7d2fe;">
+            <strong style="font-size:14px; color:#1e1b4b;">${escapeHtml(ghazal.title)}</strong>
+            <span class="badge" style="background:#e0e7ff; color:#3730a3;">G‘azal</span>
+          </div>
+          <pre class="ghazal-pre">${escapeHtml(ghazal.lines.join("\n"))}</pre>
+        </div>
+      `;
+    }
+
+    function renderQuestionStage() {
+      const tasks = getTasks();
+      const task = tasks[appState.currentIndex];
+      if (!task) return;
+
+      document.getElementById("current-sec-badge").textContent = `${task.section}-bo‘lim`;
+      document.getElementById("current-q-type-tag").textContent = task.typeLabel;
+      document.getElementById("current-sec-title").textContent = task.sectionName;
+      document.getElementById("nav-q-indicator").textContent = task.id;
+
+      const flagged = !!appState.flagged[task.id];
+      const flagBtn = document.getElementById("flag-toggle-btn");
+      const flagLbl = document.getElementById("flag-btn-label");
+      if (flagged) {
+        flagBtn.style.background = "#fbbf24";
+        flagBtn.style.borderColor = "#f59e0b";
+        flagBtn.style.color = "#0f172a";
+        flagLbl.textContent = "Belgilangan";
+      } else {
+        flagBtn.style.background = "#ffffff";
+        flagBtn.style.borderColor = "var(--border-strong)";
+        flagBtn.style.color = "var(--text-main)";
+        flagLbl.textContent = "Belgilash";
+      }
+
+      document.getElementById("prev-q-btn").disabled = appState.currentIndex === 0;
+      const nextBtn = document.getElementById("next-q-btn");
+      if (appState.currentIndex === tasks.length - 1) {
+        nextBtn.textContent = "Yakunlash ✓";
+        nextBtn.className = "btn btn-success";
+        nextBtn.onclick = () => openFinishModal();
+      } else {
+        nextBtn.textContent = "Keyingi →";
+        nextBtn.className = "btn btn-primary";
+        nextBtn.onclick = () => nextQuestion();
+      }
+
+      highlightSectionTab(task.section);
+
+      let html = "";
+      if (task.passageRef) html += renderPassageHtml(task.passageRef);
+      if (task.ghazalRef) html += renderGhazalHtml(task.ghazalRef);
+
+      if (task.type === "mcq") {
+        const selectedLetter = appState.answers[task.id] || "";
+        html += `
+          <div class="card" style="padding:20px 22px;">
+            <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:16px;">
+              <span class="ru-badge" style="width:32px; height:32px; font-size:13px; border-radius:9px;">${task.id}</span>
+              <div style="font-size:16px; font-weight:700; color:var(--text-main); line-height:1.45;">
+                ${escapeHtml(task.question)}
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              ${task.options.map((opt) => {
+                const isSel = selectedLetter === opt.letter;
+                return `
+                  <button type="button" onclick="chooseMcqOption(${task.id}, '${opt.letter}')" class="option-btn ${isSel ? "selected" : ""}">
+                    <span class="option-letter">${opt.letter}</span>
+                    <span>${escapeHtml(opt.text)}</span>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      } else if (task.type === "open") {
+        const currentVal = appState.answers[task.id] || "";
+        html += `
+          <div class="card" style="padding:20px 22px;">
+            <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:16px;">
+              <span class="ru-badge" style="width:32px; height:32px; font-size:13px; border-radius:9px; background:linear-gradient(135deg,#7c3aed,#6d28d9);">${task.id}</span>
+              <div>
+                <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#7c3aed; margin-bottom:3px;">Qisqa yozma javob</div>
+                <div style="font-size:16px; font-weight:700; color:var(--text-main); line-height:1.45;">
+                  ${escapeHtml(task.question)}
+                </div>
+              </div>
+            </div>
+            <div style="max-width:540px;">
+              <label style="display:block; font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:6px;">Javobingizni kiriting:</label>
+              <input type="text" value="${escapeHtml(currentVal)}" oninput="updateOpenAnswer(${task.id}, this.value)" placeholder="Javobni yozing..." class="text-input" />
+            </div>
+          </div>
+        `;
+      } else if (task.type === "essay") {
+        const words = countWords(appState.essayText);
+        const chars = (appState.essayText || "").length;
+        const activePrompt = task.prompts.find((p) => p.id === appState.selectedPromptId) || task.prompts[0];
+
+        html += `
+          <div class="card" style="padding:20px 22px;">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span class="ru-badge" style="width:34px; height:34px; font-size:13px; border-radius:9px; background:linear-gradient(135deg,#059669,#047857);">45</span>
+                <div>
+                  <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--success);">45-topshiriq • 24 ball</div>
+                  <div style="font-size:16px; font-weight:800;">Argumentativ Esse (12 mezon)</div>
+                </div>
+              </div>
+              <button type="button" onclick="fillExamSampleEssay()" class="btn btn-outline" style="padding:7px 12px; font-size:12px;">
+                Namuna esse qo‘yish
+              </button>
+            </div>
+
+            <div style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:var(--text-secondary); margin-bottom:8px;">
+              Mavzuni tanlang:
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:10px; margin-bottom:14px;">
+              ${task.prompts.map((pr) => {
+                const picked = pr.id === activePrompt.id;
+                return `
+                  <button type="button" onclick="selectExamPrompt('${pr.id}')" style="text-align:left; padding:12px; border-radius:12px; border:1px solid ${picked ? "var(--success)" : "var(--border-light)"}; background:${picked ? "var(--success-soft)" : "var(--bg-subtle)"};">
+                    <div style="font-size:12.5px; font-weight:800; color:${picked ? "#065f46" : "var(--text-main)"};">${escapeHtml(pr.title)}</div>
+                    <div style="font-size:11.5px; color:var(--text-secondary); margin-top:4px;">${escapeHtml(pr.text)}</div>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+
+            <div style="background:var(--success-soft); border:1px solid #a7f3d0; border-radius:12px; padding:12px 14px; font-size:13px; color:#064e3b; margin-bottom:14px;">
+              <strong>Tanlangan mavzu:</strong> ${escapeHtml(activePrompt.text)}
+            </div>
+
+            <textarea id="exam-essay-box" oninput="updateExamEssay(this.value)" placeholder="Kirish (tezis), dalilli asosiy qism va xulosadan iborat esseni shu yerga yozing..." class="textarea-input essay-textarea">${escapeHtml(appState.essayText)}</textarea>
+
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; margin-top:8px; font-size:12px; color:var(--text-secondary);">
+              <strong id="exam-wc-text">So‘zlar: ${words} • Belgilar: ${chars}</strong>
+              <span>Tavsiya: 220–350 so‘z</span>
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById("question-stage").innerHTML = html;
+    }
+
+    function chooseMcqOption(taskId, letter) {
+      appState.answers[taskId] = letter;
+      saveState();
+      renderQuestionStage();
+      renderPalettes();
+      updateProgress();
+    }
+
+    function updateOpenAnswer(taskId, val) {
+      appState.answers[taskId] = val;
+      saveState();
+      renderPalettes();
+      updateProgress();
+    }
+
+    function selectExamPrompt(promptId) {
+      appState.selectedPromptId = promptId;
+      saveState();
+      renderQuestionStage();
+    }
+
+    function updateExamEssay(val) {
+      appState.essayText = val;
+      saveState();
+      const wcEl = document.getElementById("exam-wc-text");
+      if (wcEl) {
+        wcEl.textContent = `So‘zlar: ${countWords(val)} • Belgilar: ${val.length}`;
+      }
+      updateProgress();
+      renderPalettes();
+    }
+
+    function fillExamSampleEssay() {
+      appState.essayText = SAMPLE_ESSAY;
+      saveState();
+      renderQuestionStage();
+      updateProgress();
+      renderPalettes();
+      showToast("Namuna esse matni joylashtirildi.");
+    }
+
+    function clearCurrentAnswer() {
+      const task = getTasks()[appState.currentIndex];
+      if (!task) return;
+      if (task.type === "essay") {
+        appState.essayText = "";
+      } else {
+        delete appState.answers[task.id];
+      }
+      saveState();
+      renderQuestionStage();
+      renderPalettes();
+      updateProgress();
+      showToast(`${task.id}-topshiriq tozalandi.`);
+    }
+
+    function toggleFlag() {
+      const task = getTasks()[appState.currentIndex];
+      if (!task) return;
+      appState.flagged[task.id] = !appState.flagged[task.id];
+      saveState();
+      renderQuestionStage();
+      renderPalettes();
+    }
+
+    function jumpToQuestion(qNum) {
+      appState.currentIndex = Math.max(0, Math.min(44, qNum - 1));
+      saveState();
+      renderQuestionStage();
+      renderPalettes();
+    }
+
+    function prevQuestion() {
+      if (appState.currentIndex > 0) {
+        appState.currentIndex -= 1;
+        saveState();
+        renderQuestionStage();
+        renderPalettes();
+      }
+    }
+
+    function nextQuestion() {
+      if (appState.currentIndex < 44) {
+        appState.currentIndex += 1;
+        saveState();
+        renderQuestionStage();
+        renderPalettes();
+      }
+    }
+
+    function toggleMobilePalette() {
+      document.getElementById("mobile-palette-modal").classList.toggle("hidden");
+    }
+
+    function renderPalettes() {
+      const tasks = getTasks();
+      const targets = [
+        document.getElementById("desktop-palette-grid"),
+        document.getElementById("mobile-palette-grid")
+      ];
+
+      targets.forEach((grid) => {
+        if (!grid) return;
+        grid.innerHTML = tasks.map((t, idx) => {
+          const classes = ["palette-btn"];
+          if (appState.flagged[t.id]) {
+            classes.push("flagged");
+          } else if (isAnswered(t)) {
+            classes.push("answered");
+          }
+          if (idx === appState.currentIndex) {
+            classes.push("current");
+          }
+          return `
+            <button type="button" onclick="jumpToQuestion(${t.id}); if(window.innerWidth < 1024){ document.getElementById('mobile-palette-modal').classList.add('hidden'); }" class="${classes.join(" ")}">
+              ${t.id}
+            </button>
+          `;
+        }).join("");
+      });
+    }
+
+    // =========================================================================
+    // 6. 12-CRITERION UZBEK ESSAY EVALUATOR (24 POINTS MAX)
+    // =========================================================================
+    function roundHalf(val) {
+      return Math.round(val * 2) / 2;
+    }
+
+    function evaluateEssay12Criteria(text, topic) {
+      const raw = (text || "").trim();
+      const words = countWords(raw);
+      const chars = raw.length;
+      const sentences = raw ? raw.split(/[.!?…]+/).map((s) => s.trim()).filter(Boolean) : [];
+      const paragraphs = raw ? raw.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean) : [];
+      const uniqueWords = new Set(normalizeStr(raw).split(" ").filter(Boolean));
+      const diversity = words > 0 ? uniqueWords.size / words : 0;
+      const avgSentLen = sentences.length > 0 ? words / sentences.length : 0;
+      const lower = raw.toLowerCase();
+
+      const issues = [];
+      const suggestions = [];
+
+      if (words === 0) {
+        return {
+          totalScore: 0,
+          words: 0,
+          chars: 0,
+          criteria: Array.from({ length: 12 }, (_, idx) => ({
+            num: idx + 1,
+            name: CRITERIA_NAMES[idx],
+            score: 0,
+            comment: "Esse matni kiritilmagan."
+          })),
+          issues: ["Esse matni yozilmagan yoki bo‘sh."],
+          suggestions: ["Mavzu bo‘yicha kirish (tezis), dalilli asosiy qism va xulosa yozing."]
+        };
+      }
+
+      if (words < 120) {
+        issues.push(`Matn hajmi qisqa (${words} so‘z). Sertifikat essesida fikrni to‘liq ochish uchun 220–320 so‘z tavsiya etiladi.`);
+      } else if (words > 420) {
+        issues.push(`Matn hajmi uzunroq (${words} so‘z). Fikrlarni ixcham va aniq bayon etish tavsiya etiladi.`);
+      }
+
+      let orthIssueCount = 0;
+      if (/\bxam\b/i.test(raw)) {
+        orthIssueCount++;
+        issues.push("«xam» o‘rniga adabiy me’yorda «ham» yozilishi lozim.");
+      }
+      if (/\bxaqiq/i.test(raw)) {
+        orthIssueCount++;
+        issues.push("«xaqiqat...» so‘zida «h» harfi o‘rniga «x» yozilgan; to‘g‘risi: «haqiqat...».");
+      }
+      if (/\bqaxramon/i.test(raw)) {
+        orthIssueCount++;
+        issues.push("«qaxramon» so‘zida «h» o‘rniga «x» yozilgan; to‘g‘risi: «qahramon».");
+      }
+
+      let capErrors = 0;
+      for (let i = 1; i < sentences.length; i++) {
+        const ch = sentences[i].charAt(0);
+        if (ch && /[a-z‘’ʻʼ]/.test(ch)) {
+          capErrors++;
+        }
+      }
+      if (capErrors > 0) {
+        issues.push(`${capErrors} ta gap bosh harf bilan boshlanmagan yoki tinish belgisidan keyingi bo‘shliq tekshirilishi kerak.`);
+      }
+
+      const hasThesis = /menimcha|fikrimcha|pozitsiya|ta’kidlayman|ishonamanki|muhim|zarur|lozim/.test(lower);
+      const hasEvidence = /masalan|jumladan|misol|tajriba|dalil|natijada|sababli|chunki|zero|asar|tarix/.test(lower);
+      const hasConclusion = /xulosa|yakun|demak|shunday qilib|umumlashtirib/.test(lower);
+
+      if (!hasThesis) suggestions.push("Kirish qismida o‘z pozitsiyangizni (tezisingizni) aniq bayon qiling.");
+      if (!hasEvidence) suggestions.push("Asosiy qismda «Masalan, ...», «Chunki ...» kabi bog‘lovchilar bilan dalil va misollar keltiring.");
+      if (!hasConclusion) suggestions.push("Yakuniy qismda «Xulosa qilib aytganda, ...» tarzida umumlashtiring.");
+      if (paragraphs.length < 3) suggestions.push("Matnni kamida 3 xatboshiga (kirish, dalillar, xulosa) ajrating.");
+
+      const lenRatio = Math.min(1, words / 220) * (words > 450 ? 0.85 : 1);
+
+      const scores = [
+        roundHalf(Math.min(2, (hasThesis ? 1.5 : 0.8) * lenRatio + 0.3)),
+        roundHalf(Math.min(2, ((topic && topic.trim().length > 5) ? 1.45 : 1.1) * lenRatio + 0.3)),
+        roundHalf(Math.min(2, (paragraphs.length >= 3 ? 1.5 : 1.0) * lenRatio + 0.25)),
+        roundHalf(Math.min(2, (sentences.length >= 5 ? 1.45 : 0.95) * lenRatio + 0.25)),
+        roundHalf(Math.min(2, (hasEvidence ? 1.5 : 0.9) * lenRatio + 0.25)),
+        roundHalf(Math.min(2, (hasEvidence && sentences.length >= 6 ? 1.45 : 1.0) * lenRatio + 0.25)),
+        roundHalf(Math.min(2, (hasConclusion ? 1.5 : 0.9) * lenRatio + 0.25)),
+        roundHalf(Math.min(2, Math.min(1.85, diversity * 2.4) * (words >= 50 ? 1 : 0.65))),
+        roundHalf(Math.min(2, (avgSentLen >= 7 && avgSentLen <= 28 ? 1.6 : 1.1) * (words >= 50 ? 1 : 0.65))),
+        roundHalf(Math.max(0.5, Math.min(2, 1.85 - orthIssueCount * 0.35) * (words >= 40 ? 1 : 0.65))),
+        roundHalf(Math.max(0.5, Math.min(2, 1.85 - capErrors * 0.35) * (words >= 40 ? 1 : 0.65))),
+        roundHalf(Math.min(2, 1.45 * lenRatio + 0.25))
+      ];
+
+      const comments = [
+        hasThesis ? "Tezis/pozitsiya ifodalangan." : "Tezisni aniqroq ko‘rsatish kerak.",
+        "Mavzu yo‘nalishi baholandi.",
+        `Xatboshilar soni: ${paragraphs.length} ta.`,
+        `Gaplar soni: ${sentences.length} ta (o‘rtacha ${avgSentLen.toFixed(1)} so‘z).`,
+        hasEvidence ? "Dalil va misollar qo‘llangan." : "Dalillar va misollarni ko‘paytiring.",
+        "Tahlil va bog‘lanish darajasi tekshirildi.",
+        hasConclusion ? "Yakuniy xulosa mavjud." : "Yakuniy xulosa qo‘shish tavsiya etiladi.",
+        `Leksik xilma-xillik: ${Math.round(diversity * 100)}%.`,
+        "Jumla tuzilishi va uslubiy me’yor tahlil qilindi.",
+        orthIssueCount === 0 ? "Yaqqol imlo xatosi topilmadi." : `${orthIssueCount} ta imlo e’tiborga olindi.`,
+        capErrors === 0 ? "Tinish belgilari/bosh harflar me’yoriy." : `${capErrors} ta bosh harf/tinish belgisi e’tiborga olindi.`,
+        `Hajm: ${words} so‘z (${chars} belgi).`
+      ];
+
+      const criteria = CRITERIA_NAMES.map((name, idx) => ({
+        num: idx + 1,
+        name,
+        score: scores[idx],
+        comment: comments[idx]
+      }));
+
+      const totalScore = Math.min(24, roundHalf(criteria.reduce((sum, item) => sum + item.score, 0)));
+
+      return {
+        totalScore,
+        words,
+        chars,
+        criteria,
+        issues,
+        suggestions
+      };
+    }
+
+    const CRITERIA_NAMES = [
+      "Mavzuni anglash va tezis aniqligi",
+      "Mavzudan chetga chiqmaslik",
+      "Kompozitsion tuzilish (kirish, asosiy, xulosa)",
+      "Mantiqiy izchillik va bog‘lanish",
+      "Dalillar va misollar salmog‘i",
+      "Tahlil chuqurligi va mulohaza",
+      "Xulosaning mantiqiyligi",
+      "Lug‘at boyligi va so‘z tanlash",
+      "Uslubiy me’yor va jumla qurilishi",
+      "Imlo (orfografik) savodxonlik",
+      "Punktuatsiya (tinish belgilari)",
+      "Hajm talabi va matn yaxlitligi"
+    ];
+
+    function renderEssayReportHtml(evalObj) {
+      return `
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; background:var(--success-soft); border:1px solid #a7f3d0; border-radius:14px; padding:14px 18px; margin-bottom:18px;">
+          <div>
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--success);">Esse natijasi</div>
+            <div style="font-size:26px; font-weight:800; color:var(--text-main);">
+              ${evalObj.totalScore.toFixed(1)} <span style="font-size:13px; color:var(--text-muted); font-weight:600;">/ 24.0 ball</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary);">Hajm: <strong>${evalObj.words} so‘z</strong> • 12 mezon bo‘yicha baholandi</div>
+          </div>
+          <div style="font-size:12px; color:#064e3b; max-width:420px;">
+            Har bir mezon <strong>2.0 ballgacha</strong> baholanadi. Aniq tezis, dalilli misollar, xatboshi tuzilmasi va to‘g‘ri imlo yuqori ball beradi.
+          </div>
+        </div>
+
+        <div class="criteria-grid">
+          ${evalObj.criteria.map((c) => `
+            <div class="criterion-box">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+                <strong style="font-size:12.5px; color:var(--text-main);">${c.num}. ${escapeHtml(c.name)}</strong>
+                <span class="badge" style="background:#ffffff; color:var(--success); border:1px solid #d1fae5; flex-shrink:0;">${c.score.toFixed(1)} / 2.0</span>
+              </div>
+              <div style="font-size:11.5px; color:var(--text-secondary); margin-top:6px;">${escapeHtml(c.comment)}</div>
+            </div>
+          `).join("")}
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-top:16px;">
+          <div style="background:var(--danger-soft); border:1px solid #fecdd3; border-radius:12px; padding:14px;">
+            <div style="font-size:12px; font-weight:800; color:#9f1239; margin-bottom:6px;">E’tiborli jihatlar / kamchiliklar</div>
+            ${
+              evalObj.issues.length
+                ? `<ul style="margin:0; padding-left:18px; font-size:12px; color:#881337;">${evalObj.issues.map((i) => `<li style="margin-bottom:4px;">${escapeHtml(i)}</li>`).join("")}</ul>`
+                : `<div style="font-size:12px; color:#881337;">Jiddiy kamchilik aniqlanmadi.</div>`
+            }
+          </div>
+
+          <div style="background:var(--primary-soft); border:1px solid #c7d2fe; border-radius:12px; padding:14px;">
+            <div style="font-size:12px; font-weight:800; color:#3730a3; margin-bottom:6px;">Tavsiyalar</div>
+            ${
+              evalObj.suggestions.length
+                ? `<ul style="margin:0; padding-left:18px; font-size:12px; color:#312e81;">${evalObj.suggestions.map((s) => `<li style="margin-bottom:4px;">${escapeHtml(s)}</li>`).join("")}</ul>`
+                : `<div style="font-size:12px; color:#312e81;">Tuzilma yaxshi; dalillarni yanada boyitish mumkin.</div>`
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 7. SCORING (51 + 24 = 75 PTS) & RESULTS RENDERING
+    // =========================================================================
+    function isTaskCorrect(task) {
+      if (task.type === "mcq") {
+        return (appState.answers[task.id] || "").toUpperCase() === task.correctLetter;
+      }
+      if (task.type === "open") {
+        const norm = normalizeStr(appState.answers[task.id] || "");
+        if (!norm) return false;
+        return task.accepted.some((acc) => normalizeStr(acc) === norm);
+      }
+      return false;
+    }
+
+    function getLevelFromScore(total) {
+      if (total >= 70) return { code: "A+", note: "Eng yuqori daraja (70.0+ ball)" };
+      if (total >= 65) return { code: "A", note: "A’lo daraja (65.0–69.9 ball)" };
+      if (total >= 60) return { code: "B+", note: "Yuqori daraja (60.0–64.9 ball)" };
+      if (total >= 55) return { code: "B", note: "Yaxshi daraja (55.0–59.9 ball)" };
+      if (total >= 50) return { code: "C+", note: "O‘rta-yuqori daraja (50.0–54.9 ball)" };
+      if (total >= 46) return { code: "C", note: "Sertifikat darajasi (46.0–49.9 ball)" };
+      return { code: "Daraja yetarli emas", note: "46.0 balldan yuqori natija sertifikat beradi" };
+    }
+
+    function showResultsScreen() {
+      document.getElementById("start-screen").classList.add("hidden");
+      document.getElementById("exam-screen").classList.add("hidden");
+      document.getElementById("results-screen").classList.remove("hidden");
+
+      const tasks = getTasks();
+      const testTasks = tasks.filter((t) => t.id <= 44);
+      const essayTask = tasks[44];
+
+      let correctCount = 0;
+      let rawTestScore = 0;
+      testTasks.forEach((t) => {
+        if (isTaskCorrect(t)) {
+          correctCount += 1;
+          rawTestScore += t.points;
+        }
+      });
+
+      const testScore = Math.min(51.0, Math.round(rawTestScore * 10) / 10);
+      const activePrompt = essayTask.prompts.find((p) => p.id === appState.selectedPromptId) || essayTask.prompts[0];
+      const essayEval = evaluateEssay12Criteria(appState.essayText, activePrompt.text);
+      const totalScore = Math.min(75.0, Math.round((testScore + essayEval.totalScore) * 10) / 10);
+      const level = getLevelFromScore(totalScore);
+
+      document.getElementById("res-variant-label").textContent = appState.activeSet.variantLabel;
+      document.getElementById("res-test-points").textContent = testScore.toFixed(1);
+      document.getElementById("res-test-correct-info").textContent = `${correctCount} / 44 to‘g‘ri`;
+      document.getElementById("res-essay-points").textContent = essayEval.totalScore.toFixed(1);
+      document.getElementById("res-essay-meta").textContent = `${essayEval.words} so‘z • 12 mezon`;
+      document.getElementById("res-total-points").textContent = totalScore.toFixed(1);
+      document.getElementById("res-total-percent").textContent = `${Math.round((totalScore / 75) * 100)}% umumiy natija`;
+      document.getElementById("res-cert-level").textContent = level.code;
+      document.getElementById("res-cert-note").textContent = level.note;
+
+      const secSummary = [
+        { sec: 1, title: "1–15 Grammatika" },
+        { sec: 2, title: "16–25 Matn tahlili" },
+        { sec: 3, title: "26–35 Adabiyot" },
+        { sec: 4, title: "36–44 Ochiq test" }
+      ];
+
+      document.getElementById("section-breakdown-grid").innerHTML = secSummary.map((item) => {
+        const group = testTasks.filter((t) => t.section === item.sec);
+        const ok = group.filter(isTaskCorrect).length;
+        const pct = Math.round((ok / group.length) * 100);
+        return `
+          <div style="background:var(--bg-subtle); border:1px solid var(--border-light); border-radius:12px; padding:14px;">
+            <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:700; margin-bottom:8px;">
+              <span>${escapeHtml(item.title)}</span>
+              <span style="color:var(--primary);">${ok}/${group.length} (${pct}%)</span>
+            </div>
+            <div style="height:7px; background:#e2e8f0; border-radius:999px; overflow:hidden;">
+              <div style="height:100%; width:${pct}%; background:var(--primary); border-radius:999px;"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("exam-essay-report").innerHTML = renderEssayReportHtml(essayEval);
+      renderReviewList();
+    }
+
+    function setReviewFilter(filterMode) {
+      appState.reviewFilter = filterMode;
+      saveState();
+
+      const btnAll = document.getElementById("filter-btn-all");
+      const btnWrong = document.getElementById("filter-btn-wrong");
+
+      if (filterMode === "all") {
+        btnAll.className = "btn btn-primary";
+        btnWrong.className = "btn btn-outline";
+        btnWrong.style.color = "var(--danger)";
+        btnWrong.style.background = "var(--danger-soft)";
+        btnWrong.style.borderColor = "#fecdd3";
+      } else {
+        btnWrong.className = "btn";
+        btnWrong.style.background = "var(--danger)";
+        btnWrong.style.color = "#ffffff";
+        btnWrong.style.borderColor = "var(--danger)";
+        btnAll.className = "btn btn-outline";
+        btnAll.style.background = "#ffffff";
+        btnAll.style.color = "var(--text-main)";
+        btnAll.style.borderColor = "var(--border-strong)";
+      }
+
+      renderReviewList();
+    }
+
+    function renderReviewList() {
+      const container = document.getElementById("review-questions-container");
+      const testTasks = getTasks().filter((t) => t.id <= 44);
+      const list = testTasks.filter((t) => appState.reviewFilter === "wrong" ? !isTaskCorrect(t) : true);
+
+      if (!list.length) {
+        container.innerHTML = `<div style="padding:28px; text-align:center; font-weight:700; color:var(--success);">Xato javoblar topilmadi!</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((t) => {
+        const ok = isTaskCorrect(t);
+        const userAns = appState.answers[t.id] || "Javob berilmagan";
+        return `
+          <div class="review-item ${ok ? "" : "wrong"}">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="badge" style="background:${ok ? "var(--success-soft)" : "var(--danger-soft)"}; color:${ok ? "#065f46" : "#9f1239"};">${t.id}-savol</span>
+                <span style="font-size:12px; color:var(--text-muted); font-weight:600;">${escapeHtml(t.typeLabel)}</span>
+              </div>
+              <span class="badge" style="background:${ok ? "var(--success-soft)" : "var(--danger-soft)"}; color:${ok ? "#065f46" : "#9f1239"};">
+                ${ok ? "To‘g‘ri" : "Xato"}
+              </span>
+            </div>
+            <div style="font-size:14.5px; font-weight:700; color:var(--text-main); margin-bottom:8px;">${escapeHtml(t.question)}</div>
+            <div style="display:flex; flex-wrap:wrap; gap:16px; font-size:12.5px; margin-bottom:8px;">
+              <span>Sizning javobingiz: <strong style="color:${ok ? "var(--success)" : "var(--danger)"};">${escapeHtml(userAns)}</strong></span>
+              <span>To‘g‘ri javob: <strong style="color:var(--primary);">${escapeHtml(t.displayAnswer)}</strong></span>
+            </div>
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-light); border-radius:10px; padding:10px 12px; font-size:12px; color:var(--text-secondary);">
+              <strong>Tahlil:</strong> ${escapeHtml(t.explanation)}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =========================================================================
+    // 8. STANDALONE ESSAY MODAL ("FAQAT ESSENI TEKSHIRISH (AI)")
+    // =========================================================================
+    function openStandaloneEssayModal() {
+      document.getElementById("standalone-essay-modal").classList.remove("hidden");
+      const topicEl = document.getElementById("standalone-topic-input");
+      if (!topicEl.value.trim()) {
+        topicEl.value = EXAM_VARIANTS[0].essayPrompts[0].text;
+      }
+      updateStandaloneWordCount();
+    }
+
+    function closeStandaloneEssayModal() {
+      document.getElementById("standalone-essay-modal").classList.add("hidden");
+    }
+
+    function loadSampleEssayIntoStandalone() {
+      document.getElementById("standalone-essay-input").value = SAMPLE_ESSAY;
+      updateStandaloneWordCount();
+      showToast("Namuna esse matni kiritildi.");
+    }
+
+    function updateStandaloneWordCount() {
+      const txt = document.getElementById("standalone-essay-input").value || "";
+      document.getElementById("standalone-wc-label").textContent = `So‘zlar: ${countWords(txt)} | Belgilar: ${txt.length}`;
+    }
+
+    function runStandaloneEssayEvaluation() {
+      const topic = document.getElementById("standalone-topic-input").value || "";
+      const text = document.getElementById("standalone-essay-input").value || "";
+      if (!text.trim()) {
+        showToast("Avval esse matnini kiriting!");
+        return;
+      }
+      const res = evaluateEssay12Criteria(text, topic);
+      const out = document.getElementById("standalone-essay-output");
+      out.innerHTML = renderEssayReportHtml(res);
+      out.classList.remove("hidden");
+    }
+
+    // =========================================================================
+    // 9. INITIALIZATION ON LOAD
+    // =========================================================================
+    window.addEventListener("DOMContentLoaded", () => {
+      const restored = loadState();
+      if (restored && appState.started && appState.finished) {
+        showResultsScreen();
+      } else if (restored && appState.started && !appState.finished) {
+        showExamScreen();
+      }
+    });
+  </script>
+</body>
+</html>
